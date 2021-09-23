@@ -20,6 +20,7 @@ public class Main {
 	private static int targetBase;
 	private static String intPart;
 	private static String fractPart;
+	public static final int accuracy = 5;
 
 	static {
 		int start = 1;
@@ -50,13 +51,22 @@ public class Main {
 			}
 			BigInteger DecimalIntPart = convertToDecimalIntPart();
 			BigDecimal DecimalFractPart = convertToDecimalFractPart();
-			convertToTargetBaseIntPart(DecimalIntPart, BigInteger.valueOf(targetBase));
-			convertToTargetBaseFractPart(DecimalFractPart, BigDecimal.valueOf(targetBase));
+			String intPartToPrint = convertToTargetBaseIntPart(DecimalIntPart, BigInteger.valueOf(targetBase));
+			String fractPartToPrint = convertToTargetBaseFractPart(DecimalFractPart, BigDecimal.valueOf(targetBase));
+			printConversionResult(intPartToPrint, fractPartToPrint);
 			printMessageSecondLevel();
 			inputData = sc.nextLine();
 		}
 		System.out.println();
 		getDataFitsrLevel(sc);
+	}
+
+	private static void printConversionResult(String intPart, String fractPart) {
+		if (Main.fractPart == null) {
+			System.out.println("Conversion result: " + intPart + "\n");
+			return;
+		}
+		System.out.println("Conversion result: " + intPart + "." + fractPart + "\n");
 	}
 
 	private static void printMessageSecondLevel() {
@@ -76,18 +86,21 @@ public class Main {
 		}
 		return result;
 	}
-	
+
 	private static BigDecimal convertToDecimalFractPart() {
 		BigDecimal result = BigDecimal.ZERO;
 		BigDecimal toAdd = BigDecimal.ONE;
+		if (fractPart == null) {
+			return result;
+		}
 		int j = 1;
 		for (int i = 0; i < fractPart.length(); i++) {
 			toAdd = BigDecimal.valueOf(Character.getNumericValue(fractPart.charAt(i)))
-					.divide(BigDecimal.valueOf(sourceBase).pow(j));
+					.divide(BigDecimal.valueOf(sourceBase).pow(j), 10, RoundingMode.HALF_UP);
 			result = result.add(toAdd);
 			j++;
 		}
-		return result;
+		return result.setScale(5, RoundingMode.HALF_UP);
 	}
 
 	private static void getDataFitsrLevel(Scanner sc) {
@@ -147,10 +160,10 @@ public class Main {
 
 	private static void makeDataToConvert(String[] inputData) {
 		intPart = inputData[0];
-		fractPart = inputData[1];
+		fractPart = inputData.length != 1 ? inputData[1] : null;
 	}
 
-	private static void convertToTargetBaseIntPart(BigInteger inputData, BigInteger baseData) {
+	private static String convertToTargetBaseIntPart(BigInteger inputData, BigInteger baseData) {
 		String intPart = "";
 		BigInteger[] reminder;
 		while (true) {
@@ -164,24 +177,26 @@ public class Main {
 				inputData = inputData.divide(baseData);
 			}
 		}
-		System.out.println("Conversion result of int part: " + intPart + "\n");
-		// System.out.println(ans.equals("1001110010011111010001010100111110001111101101011010101101001001111110100010111011111111"));
+		// System.out.println("Conversion result of int part: " + intPart + "\n");
+		return intPart;
 	}
-	
-	private static void convertToTargetBaseFractPart(BigDecimal inputData, BigDecimal baseData) {
+
+	private static String convertToTargetBaseFractPart(BigDecimal inputData, BigDecimal baseData) {
 		String fractPart = "";
-		BigDecimal rest = BigDecimal.ZERO;
-		BigDecimal limit = baseData.subtract(BigDecimal.ONE);
-		while (rest.compareTo(limit) != 0) {
-			rest = inputData.multiply(baseData);
-			fractPart += rest.intValue();
-			if (rest.compareTo(limit) == 1) {
-				rest = rest.subtract(limit);
-			}
+		BigDecimal rest = inputData;
+		BigDecimal limit = BigDecimal.ONE;
+		int indexTobreak = 0;
+		while (rest.compareTo(limit) != 0 && indexTobreak != accuracy) {
+			rest = rest.multiply(baseData);
+			fractPart += stringRepresentationOfReminder(rest.intValue());
+			rest = rest.subtract(BigDecimal.valueOf(rest.intValue()));
+			indexTobreak++;
 		}
-		System.out.println("Conversion result of fractional part: " + fractPart + "\n");
-		// System.out.println(ans.equals("1001110010011111010001010100111110001111101101011010101101001001111110100010111011111111"));
+		// System.out.println("Conversion result of fractional part: " + fractPart +
+		// "\n");
+		return fractPart.isEmpty() ? "00000" : fractPart;
 	}
+
 
 	private static String stringRepresentationOfReminder(int reminder) {
 		String rem = Character.toString(avaliableRange.charAt(reminder));

@@ -204,7 +204,7 @@ public class Main {
 			if (!isFound) {
 				return false;
 			}
-			tempArr[i] = Integer.valueOf(arDataFirstLevel[0]);
+			tempArr[i] = Integer.valueOf(arDataFirstLevel[i]);
 		}
 		
 		sourceBase = tempArr[0];

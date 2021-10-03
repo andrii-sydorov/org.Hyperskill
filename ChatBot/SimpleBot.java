@@ -1,39 +1,46 @@
 package ChatBot;
 
 import java.util.Calendar;
+import java.util.Scanner;
 
 /**
  * Description
  * 
- * Digital personal assistants help people to drive cars, plan their day, buy
- * something online. In a sense, they are simplified versions of artificial
- * intelligence with whom you can talk.
+ * The greeting part is great, but chatbots are also supposed to interact with a
+ * user. It's time to implement this functionality. Objective
  * 
- * In this project, you will develop step by step a simple bot that will help
- * you study programming. Objective
- * 
- * For the first stage, you will write a bot that displays a greeting, its name,
- * and the date of its creation. First impressions count!
+ * In this stage, you will introduce yourself to the bot so that it can greet
+ * you by your name.
  * 
  * Your program should print the following lines:
  * 
- * Hello! My name is {botName}. 
- * I was created in {birthYear}.
+ * Hello! 
+ * My name is Aid. 
+ * I was created in 2020. 
+ * Please, remind me your name.
+ * What a great name you have, {yourName}!
  * 
- * Instead of {botName}, print any name you choose and replace {birthYear} with
- * the current year (four digits). 
+ * You may change the name and the creation year of your bot if you want.
+ * 
+ * Instead of {yourName}, the bot must print your name entered from the standard
+ * input. 
  * 
  * Example
  * 
- * Output:
+ * The greater-than symbol followed by a space (> ) represents the user input.
+ * Note that it's not part of the input.
+ * 
+ * Example 1: a dialogue with the bot
  * 
  * Hello! My name is Aid. 
- * I was created in 2020.
+ * I was created in 2020. 
+ * Please, remind me your name. 
+ * > Max 
+ * What a great name you have, Max!
  * 
- * You can change the text if you want but print exactly two lines.
+ * Use the provided template to simplify your work. You can change the text but
+ * not the number of printed lines.
  * 
- * Next, we will use Aid and 2020 as your bot's name and its birth year, but you
- * can change it if you need to.
  * 
  * @author SMD_ASY
  *
@@ -41,20 +48,51 @@ import java.util.Calendar;
 
 public class SimpleBot {
 
+	private String nameChatBot;
+	private Calendar date;
+	private String userName;
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		final String name = "Andrii";
-		final Calendar date = Calendar.getInstance();
-		printGreetings(name);
-		printYearOfCreation(date.get(Calendar.YEAR));
+		Scanner sc = new Scanner(System.in);
+		SimpleBot simpleBot = new SimpleBot("andrii", Calendar.getInstance());
+		simpleBot.start("andrii");
+		simpleBot.getInfo(sc);
 	}
-	
-	private static void printGreetings(String name) {
+
+	public SimpleBot(String nameChatBot, Calendar dateOfCreation) {
+		this.nameChatBot = nameChatBot;
+		this.date = dateOfCreation;
+	}
+
+	private void start(String name) {
+		printGreetings(name);
+		printYearOfCreation(this.date);
+	}
+
+	private void getInfo(Scanner sc) {
+		askNameOfUser();
+		getUserName(sc);
+		printUserName();
+	}
+
+	private void printUserName() {
+		System.out.println("What a great name you have, " + this.userName + ".");
+	}
+
+	private void getUserName(Scanner sc) {
+		this.userName = sc.nextLine();
+	}
+
+	private void askNameOfUser() {
+		System.out.println("Please, remind me your name.");
+	}
+
+	private void printGreetings(String name) {
 		System.out.println("Hello! My name is " + name + ".");
 	}
-	
-	private static void printYearOfCreation(int d) {
-		System.out.println("I was created in " + d + ".");
+
+	private void printYearOfCreation(Calendar date) {
+		System.out.println("I was created in " + date.get(Calendar.YEAR) + ".");
 	}
- 
 }

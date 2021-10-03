@@ -1,4 +1,4 @@
-package ChatBot;
+package ChatBot.Stage02;
 
 import java.util.Calendar;
 import java.util.Scanner;

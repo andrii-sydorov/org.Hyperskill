@@ -1,5 +1,7 @@
 package CinemaRoomManagement.Stage01;
 
+import java.util.Arrays;
+
 /**
  * Description
  * 
@@ -41,9 +43,9 @@ package CinemaRoomManagement.Stage01;
 
 public class Cinema {
 
-	private final int rowNumbers = 7;
-	private final int columnNumbers = 8;
-	private final char[][] field = new char[rowNumbers + 1][columnNumbers * 2 + 1];
+	private final int rowNumbers = 15;
+	private final int columnNumbers = 23;
+	private final String[][] field = new String[rowNumbers + 1][columnNumbers * 2 + 1];
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -57,23 +59,27 @@ public class Cinema {
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				if (i == 0 && j == 0) {
+					field[i][j] = " ";
 					continue;
 				} else if (i == 0 && j % 2 == 0) {
-					field[i][j] = (char) (j / 2 + 48);
+					field[i][j] = String.valueOf(j / 2);
 				} else if (j == 0) {
-					field[i][j] = (char) (i + 48);
+					field[i][j] = String.valueOf(i);
 				} else if (j % 2 == 0) {
-					field[i][j] = 'S';
+					field[i][j] = "S";
 				} else {
-					field[i][j] = ' ';
+					field[i][j] = " ";
 				}
 			}
 		}
 	}
 
 	private void printField() {
-		for (char[] c : field) {
-			System.out.println(new String(c));
+		for (String[] s : field) {
+			for (String s1 : s) {
+				System.out.print(s1);
+			}
+			System.out.println();
 		}
 	}
 

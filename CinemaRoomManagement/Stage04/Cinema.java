@@ -6,66 +6,101 @@ import java.util.Scanner;
  * 
  * Description
  * 
- * When choosing a ticket you are guided not only by your space preference but
- * also by your finances. Let's implement the opportunity to check the ticket
- * price and see the reserved seat.
+ * The theatre is getting popular, and the customers started complaining that
+ * it's not practical that the program stops after buying one ticket. Let's add
+ * a menu that will allow them to buy tickets and display the current state of
+ * the seating arrangement when needed. Objectives
  * 
- * Objectives
+ * At the start, your program should read two positive integer numbers that
+ * represent the number of rows and seats in each row. Then, it should print a
+ * menu with the following three items:
  * 
- * Read two positive integer numbers that represent the number of rows and seats
- * in each row and print the seating arrangement like in the first stage. Then,
- * read two integer numbers from the input: a row number and a seat number in
- * that row. These numbers represent the coordinates of the seat according to
- * which the program should print the ticket price. The ticket price is
- * determined by the same rules as the previous stage:
+ * Show the seats should print the current seating arrangement. The empty seats
+ * should be marked with an S symbol, and taken seats are marked with a B
+ * symbol. Buy a ticket should read the seat coordinates from the input and
+ * print the ticket price like in the previous stage. After that, the chosen
+ * seat should be marked with a B when the item Show the seats is called. Exit
+ * should stop the program.
  * 
- * - If the total number of seats in the screen room is not more than 60, then
- * the price of each ticket is 10 dollars. - In a larger room, the tickets are
- * 10 dollars for the front half of the rows and 8 dollars for the back half.
- * Please note that the number of rows can be odd, for example, 9 rows. In this
- * case, the first half is the first 4 rows, and the second half is the last 5
- * rows.
- * 
- * After that, the program should print out all the seats in the screen room as
- * shown in the example and mark the chosen seat by the B symbol. Finally, it
- * should print the ticket price and stop. Note that in this project, the number
- * of rows and seats won't be greater than 9.
- * 
- * Examples
+ * Example
  * 
  * The greater-than symbol followed by a space (> ) represents the user input.
  * Note that it's not part of the input.
  * 
- * Example 1
+ * Enter the number of rows: > 7 
+ * Enter the number of seats in each row: > 7
  * 
- * Enter the number of rows: > 7 Enter the number of seats in each row: > 8
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 1
  * 
- * Cinema: 1 2 3 4 5 6 7 8 1 S S S S S S S S 2 S S S S S S S S 3 S S S S S S S S
- * 4 S S S S S S S S 5 S S S S S S S S 6 S S S S S S S S 7 S S S S S S S S
+ * Cinema: 
+ *   1 2 3 4 5 6 7 
+ * 1 S S S S S S S 
+ * 2 S S S S S S S 
+ * 3 S S S S S S S 
+ * 4 S S S S S S S 
+ * 5 S S S S S S S 
+ * 6 S S S S S S S 
+ * 7 S S S S S S S
  * 
- * Enter a row number: > 3 Enter a seat number in that row: > 6
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 2
  * 
+ * Enter a row number: 
+ * > 4 
+ * Enter a seat number in that row: 
+ * > 5 
  * Ticket price: $10
  * 
- * Cinema: 1 2 3 4 5 6 7 8 1 S S S S S S S S 2 S S S S S S S S 3 S S S S S B S S
- * 4 S S S S S S S S 5 S S S S S S S S 6 S S S S S S S S 7 S S S S S S S S
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 1
  * 
- * Example 2
+ * Cinema: 
+ *   1 2 3 4 5 6 7 
+ * 1 S S S S S S S 
+ * 2 S S S S S S S 
+ * 3 S S S S S S S
+ * 4 S S S S B S S 
+ * 5 S S S S S S S 
+ * 6 S S S S S S S 
+ * 7 S S S S S S S
  * 
- * Enter the number of rows: > 8 Enter the number of seats in each row: > 9
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 2
  * 
- * Cinema: 1 2 3 4 5 6 7 8 9 1 S S S S S S S S S 2 S S S S S S S S S 3 S S S S S
- * S S S S 4 S S S S S S S S S 5 S S S S S S S S S 6 S S S S S S S S S 7 S S S S
- * S S S S S 8 S S S S S S S S S
+ * Enter a row number: 
+ * > 6 
+ * Enter a seat number in that row: 
+ * > 6 
+ * Ticket price: $10
  * 
- * Enter a row number: > 6 Enter a seat number in that row: > 5
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 1
  * 
- * Ticket price: $8
+ * Cinema:
+ *  1 2 3 4 5 6 7 
+ *1 S S S S S S S 
+ *2 S S S S S S S 
+ *3 S S S S S S S 
+ *4 S S S S B S S 
+ *5 S S S S S S S 
+ *6 S S S S S B S 
+ *7 S S S S S S S
  * 
- * Cinema: 1 2 3 4 5 6 7 8 9 1 S S S S S S S S S 2 S S S S S S S S S 3 S S S S S
- * S S S S 4 S S S S S S S S S 5 S S S S S S S S S 6 S S S S B S S S S 7 S S S S
- * S S S S S 8 S S S S S S S S S
- * 
+ * 1. Show the seats 
+ * 2. Buy a ticket 
+ * 0. Exit 
+ * > 0
  * 
  * @author ASY
  *
@@ -117,6 +152,7 @@ public class Cinema {
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 
 	private void printName() {
@@ -146,7 +182,7 @@ public class Cinema {
 		} else {
 			price = 8;
 		}
-		System.out.println("Ticket price: $" + price);
+		System.out.println("Ticket price: $" + price + "\n");
 	}
 
 	private void makeBusy() {
@@ -164,23 +200,13 @@ public class Cinema {
 		int choice = 0;
 		do {
 			printMenu();
-			String userInput = sc.nextLine();
-			if (!isNumerical(userInput) && !inRange(choice)) {
+			choice = sc.nextInt();
+			System.out.println();
+			if (!inRange(choice)) {
 				continue;
 			}
 			userDataProcessing(choice);
 		} while (choice != 0);
-		printMenu();
-	}
-
-	private boolean isNumerical(String userInput) {
-		try {
-			int choice = Integer.valueOf(userInput);
-		} catch (NumberFormatException nfe) {
-			System.out.println("Invalid data input, shoild be numerical, without fraction part");
-			return false;
-		}
-		return true;
 	}
 
 	private boolean inRange(int choice) {

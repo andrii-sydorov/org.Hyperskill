@@ -1,0 +1,1 @@
+package AmazingNumbers.Stage02;

@@ -55,6 +55,8 @@ public class Main {
 	private boolean checkInput(String[] userStringArray) {
 		for (String s : userStringArray) {
 			if (!isNatural(s)) {
+				if ()
+				System.out.println("The first parameter should be a natural number or zero.");
 				return false;
 			}
 		}

@@ -63,6 +63,7 @@ public class Main {
 	}
 
 	private boolean isInputValid(String[] userData) {
+		complexInput = userData.length > 1 ? true : false;
 		switch (userData.length) {
 		case 1:
 			return isValidOneArgument(userData, 0, "The first parameter should be a natural number or zero.\n");
@@ -73,7 +74,6 @@ public class Main {
 		case 4:
 			return isValidFourArgument(userData) && isNotExclusiveProperties(userData);
 		}
-		complexInput = userData.length > 1 ? true : false;
 		return true;
 	}
 
@@ -300,70 +300,9 @@ public class Main {
 	private void fillAccordingOneProperty(String[] s, long startValue, int capacity) {
 		for (int i = 0; i < capacity; startValue++) {
 			String choice = s[2].toUpperCase();
-			switch (choice) {
-			case "EVEN":
-				isOddOrEven(String.valueOf(startValue));
-				if (Even) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "ODD":
-				isOddOrEven(String.valueOf(startValue));
-				if (!Even) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "BUZZ":
-				isBuzz(String.valueOf(startValue));
-				if (Buzz) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "DUCK":
-				isDuck(String.valueOf(startValue));
-				if (Duck) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "PALINDROMIC":
-				isPalindromic(String.valueOf(startValue));
-				if (Palindrome) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "GAPFUL":
-				isGapful(String.valueOf(startValue));
-				if (Gapful) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "SPY":
-				isSpy(String.valueOf(startValue));
-				if (Spy) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "SUNNY":
-				isSunny(String.valueOf(startValue));
-				if (Sunny) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
-			case "SQUARE":
-				isSquare(String.valueOf(startValue));
-				if (Square) {
-					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-					i++;
-				}
-				continue;
+			if (checkProperty(startValue, choice)) {
+				userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+				i++;
 			}
 		}
 	}

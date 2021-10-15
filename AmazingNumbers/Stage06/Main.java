@@ -19,6 +19,7 @@ public class Main {
 	private boolean Spy;
 	private boolean Sunny;
 	private boolean Square;
+	private boolean complexInput;
 	private static final String[] operation = { "EVEN", "ODD", "BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE",
 			"SUNNY" };
 
@@ -72,6 +73,7 @@ public class Main {
 		case 4:
 			return isValidFourArgument(userData) && isNotExclusiveProperties(userData);
 		}
+		complexInput = userData.length > 1 ? true : false;
 		return true;
 	}
 
@@ -108,7 +110,7 @@ public class Main {
 				return true;
 			}
 		}
-		System.out.println("The properties " + "[" + s[2] + "]" + " are wrong.");
+		System.out.println("The property " + "[" + s[2] + "]" + " is wrong.");
 		System.out.println("Available properties: " + Arrays.toString(operation));
 		return false;
 	}
@@ -117,21 +119,34 @@ public class Main {
 		if (!isValidTwoArgument(s)) {
 			return false;
 		}
-		for (int i = 2; i < s.length; i++) {
-			// TODO check (ducke spy) 
-			for (String str : operation) {
-				if (str.equalsIgnoreCase(s[i])) {
-					if (i == s.length - 1) {
-						return true;
-					}
-					break;
-				}		
+		boolean isFoundFirst = false;
+		boolean isFoundSecond = false;
+		for (String str : operation) {
+			if (str.equalsIgnoreCase(s[2])) {
+				isFoundFirst = true;
+				break;
 			}
 		}
-		System.out.println("The property " + "[" + s[2] + ", " + s[3] + "]" + " is wrong.");
-		System.out.println("Available properties: " + Arrays.toString(operation));
-		return false;
-
+		for (String str : operation) {
+			if (str.equalsIgnoreCase(s[3])) {
+				isFoundSecond = true;
+				break;
+			}
+		}
+		if (!isFoundFirst && !isFoundSecond) {
+			System.out.println("\nThe properties " + "[" + s[2] + ", " + s[3] + "]" + " are wrong.");
+			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
+			return false;
+		} else if (!isFoundFirst) {
+			System.out.println("\nThe property " + "[" + s[2]  + "]" + " is wrong.");
+			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
+			return false;
+		} else if (!isFoundSecond) {
+			System.out.println("\nThe property " + "[" + s[3]  + "]" + " is wrong.");
+			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
+			return false;
+		}
+		return true;
 	}
 
 	private boolean isNotExclusiveProperties(String[] s) {
@@ -141,8 +156,9 @@ public class Main {
 		for (String[] ar : exclusiveProperties) {
 			Arrays.sort(ar);
 			if (Arrays.deepEquals(toBeChecked, ar)) {
-				System.out.println("The request contains mutually exclusive properties: " + Arrays.toString(toBeChecked));
-				System.out.println("There are no numbers with these properties.");
+				System.out
+						.println("The request contains mutually exclusive properties: " + Arrays.toString(toBeChecked));
+				System.out.println("There are no numbers with these properties.\n");
 				return false;
 			}
 		}
@@ -194,76 +210,162 @@ public class Main {
 		case 3:
 			startValue = Long.valueOf(s[0]);
 			capacity = Integer.valueOf(s[1]);
-			for (int i = 0; i < capacity; startValue++) {
-				String choice = s[2].toUpperCase();
-				switch (choice) {
-				case "EVEN":
-					isOddOrEven(String.valueOf(startValue));
-					if (Even) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "ODD":
-					isOddOrEven(String.valueOf(startValue));
-					if (!Even) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "BUZZ":
-					isBuzz(String.valueOf(startValue));
-					if (Buzz) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "DUCK":
-					isDuck(String.valueOf(startValue));
-					if (Duck) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "PALINDROMIC":
-					isPalindromic(String.valueOf(startValue));
-					if (Palindrome) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "GAPFUL":
-					isGapful(String.valueOf(startValue));
-					if (Gapful) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "SPY":
-					isSpy(String.valueOf(startValue));
-					if (Spy) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "SUNNY":
-					isSunny(String.valueOf(startValue));
-					if (Sunny) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				case "SQUARE":
-					isSquare(String.valueOf(startValue));
-					if (Square) {
-						userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-						i++;
-					}
-					continue;
-				}
-			}
+			fillAccordingOneProperty(s, startValue, capacity);
+			break;
+		case 4:
+			startValue = Long.valueOf(s[0]);
+			capacity = Integer.valueOf(s[1]);
+			fillAccordingTwoProperties(s, startValue, capacity);
+			break;
 		}
 		System.out.println();
+	}
+
+	private void fillAccordingTwoProperties(String[] s, long startValue, int capacity) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < capacity; startValue++) {
+			String firstChoice = s[2].toUpperCase();
+			boolean firstProperty = checkProperty(startValue, firstChoice);
+			String secondChoice = s[3].toUpperCase();
+			boolean secondProperty = checkProperty(startValue, secondChoice);
+			if (firstProperty && secondProperty) {
+				userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+				i++;
+			}
+		}
+
+	}
+
+	private boolean checkProperty(long startValue, String choice) {
+		boolean firstPropery = false;
+		switch (choice) {
+		case "EVEN":
+			isOddOrEven(String.valueOf(startValue));
+			if (Even) {
+				firstPropery = true;
+			}
+			break;
+		case "ODD":
+			isOddOrEven(String.valueOf(startValue));
+			if (!Even) {
+				firstPropery = true;
+			}
+			break;
+		case "BUZZ":
+			isBuzz(String.valueOf(startValue));
+			if (Buzz) {
+				firstPropery = true;
+			}
+			break;
+		case "DUCK":
+			isDuck(String.valueOf(startValue));
+			if (Duck) {
+				firstPropery = true;
+			}
+			break;
+		case "PALINDROMIC":
+			isPalindromic(String.valueOf(startValue));
+			if (Palindrome) {
+				firstPropery = true;
+			}
+			break;
+		case "GAPFUL":
+			isGapful(String.valueOf(startValue));
+			if (Gapful) {
+				firstPropery = true;
+			}
+			break;
+		case "SPY":
+			isSpy(String.valueOf(startValue));
+			if (Spy) {
+				firstPropery = true;
+			}
+			break;
+		case "SUNNY":
+			isSunny(String.valueOf(startValue));
+			if (Sunny) {
+				firstPropery = true;
+			}
+			break;
+		case "SQUARE":
+			isSquare(String.valueOf(startValue));
+			if (Square) {
+				firstPropery = true;
+			}
+			break;
+		}
+		return firstPropery;
+	}
+
+	private void fillAccordingOneProperty(String[] s, long startValue, int capacity) {
+		for (int i = 0; i < capacity; startValue++) {
+			String choice = s[2].toUpperCase();
+			switch (choice) {
+			case "EVEN":
+				isOddOrEven(String.valueOf(startValue));
+				if (Even) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "ODD":
+				isOddOrEven(String.valueOf(startValue));
+				if (!Even) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "BUZZ":
+				isBuzz(String.valueOf(startValue));
+				if (Buzz) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "DUCK":
+				isDuck(String.valueOf(startValue));
+				if (Duck) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "PALINDROMIC":
+				isPalindromic(String.valueOf(startValue));
+				if (Palindrome) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "GAPFUL":
+				isGapful(String.valueOf(startValue));
+				if (Gapful) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "SPY":
+				isSpy(String.valueOf(startValue));
+				if (Spy) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "SUNNY":
+				isSunny(String.valueOf(startValue));
+				if (Sunny) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			case "SQUARE":
+				isSquare(String.valueOf(startValue));
+				if (Square) {
+					userStringArray[i] = String.valueOf(Long.valueOf(startValue));
+					i++;
+				}
+				continue;
+			}
+		}
 	}
 
 	private void makeStringArray(String[] data) {
@@ -335,7 +437,7 @@ public class Main {
 		String[] properties = { "buzz", "duck", "palindromic", "gapful", "spy", "square", "sunny", "even", "odd" };
 		Boolean[] propertyValues = { Buzz, Duck, Palindrome, Gapful, Spy, Square, Sunny, Even, !Even, };
 		// System.out.println("Properties of " + s);
-		if (userStringArray.length == 1) {
+		if (userStringArray.length == 1 && !complexInput) {
 			System.out.println("Properties of " + NumberFormat.getInstance(Locale.UK).format(Long.parseLong(s)));
 			for (int i = 0; i < properties.length; i++) {
 				System.out.println(properties[i] + ": " + propertyValues[i]);

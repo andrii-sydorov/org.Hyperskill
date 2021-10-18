@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.Queue;
 
 public class Main {
 
@@ -72,9 +73,9 @@ public class Main {
 		case 2:
 			return isValidTwoArgument(userData);
 		case 3:
-			return isValidThreeArgument(userData);
+			return isValidForAnyArgument(userData);
 		case 4:
-			return isValidFourArgument(userData) && isNotExclusiveProperties(userData);
+			return isValidForAnyArgument(userData) && isNotExclusiveProperties(userData);
 		}
 		return true;
 	}
@@ -103,52 +104,35 @@ public class Main {
 		return true;
 	}
 
-	private boolean isValidThreeArgument(String[] s) {
+	private boolean isValidForAnyArgument(String[] s) {
 		if (!isValidTwoArgument(s)) {
 			return false;
 		}
-		for (String str : operation) {
-			if (str.equalsIgnoreCase(s[2])) {
-				return true;
+		List<String> errors = new ArrayList<>();
+		for (int i = 2; i < s.length; i++) {
+			boolean isFound = false;
+			for (String str : operation) {
+				if (str.equalsIgnoreCase(s[i])) {
+					isFound = true;
+					break;
+				}
+			}
+			if (!isFound) {
+				errors.add(s[i]);
 			}
 		}
-		System.out.println("The property " + "[" + s[2] + "]" + " is wrong.");
-		System.out.println("Available properties: " + Arrays.toString(operation));
+		if (errors.size() == 0) {
+			return true;
+		} else if (errors.size() == 1) {
+			System.out.println(
+					"The property " + Arrays.toString(errors.toArray(new String[errors.size()])) + " is wrong.");
+			System.out.println("Available properties: " + Arrays.toString(operation));
+		} else {
+			System.out.println(
+					"The properties " + Arrays.toString(errors.toArray(new String[errors.size()])) + " are wrong.");
+			System.out.println("Available properties: " + Arrays.toString(operation));
+		}
 		return false;
-	}
-
-	private boolean isValidFourArgument(String[] s) {
-		if (!isValidTwoArgument(s)) {
-			return false;
-		}
-		boolean isFoundFirst = false;
-		boolean isFoundSecond = false;
-		for (String str : operation) {
-			if (str.equalsIgnoreCase(s[2])) {
-				isFoundFirst = true;
-				break;
-			}
-		}
-		for (String str : operation) {
-			if (str.equalsIgnoreCase(s[3])) {
-				isFoundSecond = true;
-				break;
-			}
-		}
-		if (!isFoundFirst && !isFoundSecond) {
-			System.out.println("\nThe properties " + "[" + s[2] + ", " + s[3] + "]" + " are wrong.");
-			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
-			return false;
-		} else if (!isFoundFirst) {
-			System.out.println("\nThe property " + "[" + s[2] + "]" + " is wrong.");
-			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
-			return false;
-		} else if (!isFoundSecond) {
-			System.out.println("\nThe property " + "[" + s[3] + "]" + " is wrong.");
-			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
-			return false;
-		}
-		return true;
 	}
 
 	private boolean isNotExclusiveProperties(String[] s) {
@@ -206,14 +190,8 @@ public class Main {
 				userStringArray[i] = String.valueOf(size[0]++);
 			}
 			break;
-		case 3:
-			fillAccordingOneProperty(s, size);
-			break;
-		case 4:
-			fillAccordingTwoProperties(s, size);
-			break;
-		case 5:
-			fillAccordingThreeProperties(s, size);
+		default:
+			fillAccordingAnyProperties(s, size);
 			break;
 		}
 		System.out.println();
@@ -227,31 +205,21 @@ public class Main {
 		}
 	}
 
-	private void fillAccordingThreeProperties(String[] s, long[] size) {
+	private void fillAccordingAnyProperties(String[] s, long[] size) {
 		long startValue = size[0];
 		long capacity = size[1];
 		for (int i = 0; i < capacity; startValue++) {
-			String firstChoice = s[2].toUpperCase();
-			boolean firstProperty = checkProperty(startValue, firstChoice);
-			String secondChoice = s[3].toUpperCase();
-			boolean secondProperty = checkProperty(startValue, secondChoice);
-			String thirdChoice = s[4].toUpperCase();
-			boolean sthirdProperty = checkProperty(startValue, thirdChoice);
-			if (firstProperty && secondProperty && sthirdProperty) {
-				userStringArray[i] = String.valueOf(Long.valueOf(startValue));
-				i++;
+			int count = 0;
+			for (int j = 2; j < s.length; j++) {
+				if (checkProperty(startValue, s[j].toUpperCase())) {
+					count++;
+					continue;
+				} else {
+					break;
+				}
 			}
-		}
-	}
-
-	private void fillAccordingTwoProperties(String[] s, long[] size) {
-		for (int i = 0; i < size[1]; size[0]++) {
-			String firstChoice = s[2].toUpperCase();
-			boolean firstProperty = checkProperty(size[0], firstChoice);
-			String secondChoice = s[3].toUpperCase();
-			boolean secondProperty = checkProperty(size[0], secondChoice);
-			if (firstProperty && secondProperty) {
-				userStringArray[i] = String.valueOf(Long.valueOf(size[0]));
+			if (count == s.length - 2) {
+				userStringArray[i] = String.valueOf(Long.valueOf(startValue));
 				i++;
 			}
 		}
@@ -322,16 +290,6 @@ public class Main {
 			break;
 		}
 		return firstPropery;
-	}
-
-	private void fillAccordingOneProperty(String[] s, long[] size) {
-		for (int i = 0; i < size[1]; size[0]++) {
-			String choice = s[2].toUpperCase();
-			if (checkProperty(size[0], choice)) {
-				userStringArray[i] = String.valueOf(Long.valueOf(size[0]));
-				i++;
-			}
-		}
 	}
 
 	private void makeStringArray(String[] data) {

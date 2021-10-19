@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Arrays;
-import java.util.Queue;
 
 public class Main {
 
@@ -72,12 +71,9 @@ public class Main {
 			return isValidOneArgument(userData, 0, "The first parameter should be a natural number or zero.\n");
 		case 2:
 			return isValidTwoArgument(userData);
-		case 3:
-			return isValidForAnyArgument(userData);
-		case 4:
+		default:
 			return isValidForAnyArgument(userData) && isNotExclusiveProperties(userData);
 		}
-		return true;
 	}
 
 	private boolean isValidOneArgument(String[] s, int index, String message) {
@@ -126,24 +122,29 @@ public class Main {
 		} else if (errors.size() == 1) {
 			System.out.println(
 					"The property " + Arrays.toString(errors.toArray(new String[errors.size()])) + " is wrong.");
-			System.out.println("Available properties: " + Arrays.toString(operation));
+			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
 		} else {
 			System.out.println(
 					"The properties " + Arrays.toString(errors.toArray(new String[errors.size()])) + " are wrong.");
-			System.out.println("Available properties: " + Arrays.toString(operation));
+			System.out.println("Available properties: " + Arrays.toString(operation) + "\n");
 		}
 		return false;
 	}
 
 	private boolean isNotExclusiveProperties(String[] s) {
-		String[] toBeChecked = { s[2].toUpperCase(), s[3].toUpperCase() };
-		Arrays.sort(toBeChecked);
+		String[] toBeChecked = Arrays.copyOfRange(s, 2, s.length);
 		String[][] exclusiveProperties = { { "EVEN", "ODD" }, { "DUCK", "SPY" }, { "SUNNY", "SQUARE" } };
 		for (String[] ar : exclusiveProperties) {
-			Arrays.sort(ar);
-			if (Arrays.deepEquals(toBeChecked, ar)) {
-				System.out
-						.println("The request contains mutually exclusive properties: " + Arrays.toString(toBeChecked));
+			int found = 0;
+			for (int i = 0; i < ar.length; i++) {
+				for (int j = 0; j < toBeChecked.length; j++) {
+					if (ar[i].equalsIgnoreCase(toBeChecked[j])) {
+						found++;
+					}
+				}
+			}
+			if (found == ar.length) {
+				System.out.println("\nThe request contains mutually exclusive properties: " + Arrays.toString(ar));
 				System.out.println("There are no numbers with these properties.\n");
 				return false;
 			}
@@ -286,6 +287,13 @@ public class Main {
 			isJumping(String.valueOf(startValue));
 			if (Jumping) {
 				firstPropery = true;
+//				if (String.valueOf(startValue).endsWith("0")) {
+//					startValue = startValue * 10 + 1 - 1;
+//				} else if (String.valueOf(startValue).endsWith("9")) {
+//					startValue = startValue * 10 + 8 - 1;
+//				} else {
+//					startValue = startValue * 10 + startValue % 10 + 1 - 1;
+//				}
 			}
 			break;
 		}

@@ -14,8 +14,8 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
-		Player humanPlayer;
-		Player PC_Player;
+		HumanPlayer humanPlayer;
+		IIPlayer PC_Player;
 		private int countBulls;
 		private int countCows;
 		private String secretNumber;
@@ -25,8 +25,8 @@ public class Main {
 		}
 
 		private void createPlayers() {
-			humanPlayer = new Player(this);
-			PC_Player = new Player(this);
+			humanPlayer = new HumanPlayer(this);
+			PC_Player = new IIPlayer(this);
 		}
 
 		private void getSecretNumber(String number) {
@@ -36,7 +36,7 @@ public class Main {
 		private void startGame() {
 			printGreetingsEnterLength();
 			createPlayers();
-			humanPlayer.setLengthOfSecretNumber();
+			humanPlayer.getLengthOfSecretNumber();
 			try {
 				lengthOfSecretNumber = Integer.valueOf(humanPlayer.lengthOfSecretNumber);
 			} catch (NumberFormatException nfe) {
@@ -54,7 +54,7 @@ public class Main {
 			int index = 1;
 			do {
 				System.out.println("Turn " + index + " :");
-				userNumber = humanPlayer.getUserVarinats();
+				userNumber = humanPlayer.getUserVariants();
 				countAnimals(userNumber);
 				System.out.println("Grade: " + printResult() + "\n");
 				index++;
@@ -103,7 +103,7 @@ public class Main {
 
 	}
 
-	public static class Player {
+	public static class IIPlayer {
 
 		private Game g;
 		private String secretNumber;
@@ -111,7 +111,7 @@ public class Main {
 		private int index = 0;
 		private String lengthOfSecretNumber;
 
-		public Player(Game g) {
+		public IIPlayer(Game g) {
 			this.g = g;
 		}
 
@@ -139,10 +139,6 @@ public class Main {
 			return contain(i, s);
 		}
 
-		private void setLengthOfSecretNumber() {
-			lengthOfSecretNumber = g.sc.nextLine();
-		}
-
 		private String possibleVariants() {
 			if (index > firstAttempt.length()) {
 				return firstAttempt;
@@ -165,8 +161,26 @@ public class Main {
 			return firstAttempt;
 		}
 
-		private String getUserVarinats() {
-			return g.sc.nextLine();
+	}
+
+	public static class HumanPlayer {
+		
+		private String lengthOfSecretNumber;
+		private String userVariants;
+		Game g;
+		
+		public HumanPlayer(Game g) {
+			this.g = g;
+		}
+		
+		private void getLengthOfSecretNumber() {
+			lengthOfSecretNumber = g.sc.nextLine();
+		}
+		
+		private String getUserVariants() {
+			userVariants = g.sc.nextLine();
+			return userVariants;
 		}
 	}
+
 }

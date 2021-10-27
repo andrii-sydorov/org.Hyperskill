@@ -89,11 +89,11 @@ public class Main {
 
 			String digitPart = numberOfPossibleSymbols == 0 ? ""
 					: numberOfPossibleSymbols == 1 ? "" + possibleSymbols.charAt(0)
-							: numberOfPossibleSymbols <= 10
+							: numberOfPossibleSymbols <= 9
 									? possibleSymbols.charAt(0) + "-" + possibleSymbols.charAt(numberOfPossibleSymbols)
-									: possibleSymbols.charAt(0) + "-" + possibleSymbols.charAt(10);
-			String characterPart = numberOfPossibleSymbols < 11 ? ""
-					: possibleSymbols.charAt(11) + "-" + possibleSymbols.charAt(numberOfPossibleSymbols);
+									: possibleSymbols.charAt(0) + "-" + possibleSymbols.charAt(9);
+			String characterPart = numberOfPossibleSymbols < 10 ? ""
+					: possibleSymbols.charAt(10) + "-" + possibleSymbols.charAt(numberOfPossibleSymbols);
 			String area = characterPart.isEmpty() ? "(" + digitPart + ")" : "(" + digitPart + "," + characterPart + ")";
 			System.out.println("The secret is prepared: " + stars + " " + area);
 			System.out.println("Okay, let's start a game!");
@@ -159,7 +159,7 @@ public class Main {
 			do {
 				int index = new Random().nextInt(g.numberOfPossibleSymbols);
 				String temp = Character.toString(Game.possibleSymbols.charAt(index));
-				if (ls.contains(temp)) {
+				if (!ls.contains(temp)) {
 					ls.add(temp);
 				}
 			} while (ls.size() != g.lengthOfSecretNumber);

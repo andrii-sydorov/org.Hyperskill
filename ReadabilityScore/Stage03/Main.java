@@ -24,7 +24,7 @@ public class Main {
 
 	private static void printSettings(String data) {
 		String[] sentences = data.split("[\\.?!]");
-		String[] words = data.replaceAll("[\\W]", " ").split("\\s+");
+		String[] words = data.replaceAll(",","").replaceAll("[\\W]", " ").split("\\s+");
 		String characters = data.replaceAll("\\n", "").replaceAll("\\t", "").replaceAll(" ", "");
 		System.out.println("Words " + words.length);
 		System.out.println("Sentences: " + sentences.length);

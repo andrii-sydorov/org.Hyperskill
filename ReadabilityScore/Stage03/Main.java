@@ -9,12 +9,13 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String data = readAllLines(args[0]);
-		printText(data);
-		printSettings(data);
-		data = readAllLines(args[1]);
-		printText(data);
-		printSettings(data);
+		String data = null;
+		for (int i = 0; i < args.length; i++) {
+			data = readAllLines(args[i]);
+			printText(data);
+			printSettings(data);
+			System.out.println();
+		}
 	}
 
 	private static void printText(String data) {
@@ -24,23 +25,25 @@ public class Main {
 
 	private static void printSettings(String data) {
 		String[] sentences = data.split("[\\.?!]");
-		String[] words = data.replaceAll("[\\W]", " ").split("\\s+");
+		String[] words = data.replaceAll(",", "").replaceAll("[\\W]", " ").split("\\s+");
 		String characters = data.replaceAll("\\n", "").replaceAll("\\t", "").replaceAll(" ", "");
-		System.out.println("Words " + words.length);
+		System.out.println("Words: " + words.length);
 		System.out.println("Sentences: " + sentences.length);
 		System.out.println("Characters: " + characters.length());
-		double score = 4.71 * (characters.length() * 1.0 / words.length) + 0.5 * (words.length / sentences.length)
+		double score = 4.71 * (characters.length() * 1.0 / words.length) + 0.5 * (words.length * 1.0 / sentences.length)
 				- 21.43;
 		NumberFormat nfe = NumberFormat.getInstance();
 		nfe.setMaximumFractionDigits(2);
-		int n = (int) Math.round(score);
-		System.out.println("The score is: " + nfe.format(score));
+		int n = (int) Math.ceil(score);
+		// System.out.printf("The score is: %.2f \n", score);
+		String temp = String.valueOf(score);
+		System.out.println("The score is: " + temp.substring(0, temp.indexOf(".") + 3));
 		System.out.println("This text should be understood by " + getAgesFromTable(n) + "-year-olds.");
 	}
 
 	private static String getAgesFromTable(int n) {
 		String[] gradeLavel = { "5-6", "6-7", "7-8", "8-9", "9-10", "10-11", "11-12", "12-13", "13-14", "14-15",
-				"15-16", "16-17", "17-18", "18-22" };
+				"15-16", "16-17", "17-18", "18-24" };
 		int score = 0;
 		switch (n) {
 		case 1:

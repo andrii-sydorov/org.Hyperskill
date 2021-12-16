@@ -36,6 +36,7 @@ public class RemoveElements {
 		Set<Integer> set = SetUtils.getSetFromString(str);
 		SetUtils.removeAllNumbersGreaterThan10(set);
 		set.forEach(e -> System.out.print(e + " "));
+		sc.close();
 	}
 
 }

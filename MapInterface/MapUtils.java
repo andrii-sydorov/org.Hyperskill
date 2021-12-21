@@ -2,6 +2,7 @@ package MapInterface;
 
 import java.util.Map;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -63,5 +64,25 @@ public class MapUtils {
 		for (String s : map.keySet()) {
 			System.out.println(s + " : " + map.get(s));
 		}
+	}
+
+	public static Map<Integer, String> getSubMap(TreeMap<Integer, String> map) {
+		Map<Integer, String> res = new LinkedHashMap<>();
+		boolean even = map.firstKey() % 2 == 0;
+		int start = even ? map.lastKey() - 4 : map.firstKey();
+		int stop = even ? map.lastKey() + 1 : map.firstKey() + 5;
+		SortedMap<Integer, String> temp = map.subMap(start, stop);
+		int key = temp.lastKey();
+		while (true) {
+			if (temp.containsKey(key)) {
+				res.put(key, temp.get(key));
+
+			}
+			if (key == temp.firstKey()) {
+				break;
+			}
+			key--;
+		}
+		return res;
 	}
 }

@@ -2,6 +2,9 @@ package MapInterface;
 
 import java.util.Map;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class MapUtils {
 
@@ -41,5 +44,24 @@ public class MapUtils {
 		}
 		map.remove("c");
 
+	}
+
+	public static SortedMap<String, Integer> wordCount(String[] line) {
+		SortedMap<String, Integer> map = new TreeMap<>();
+		for (int i = 0; i < line.length; i++) {
+			if (map.containsKey(line[i])) {
+				map.put(line[i], map.get(line[i]) + 1);
+			} else {
+				map.put(line[i], 1);
+			}
+
+		}
+		return map;
+	}
+
+	public static void printMap(Map<String, Integer> map) {
+		for (String s : map.keySet()) {
+			System.out.println(s + " : " + map.get(s));
+		}
 	}
 }

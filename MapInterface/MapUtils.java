@@ -85,4 +85,45 @@ public class MapUtils {
 		}
 		return res;
 	}
+	
+	/**
+	 * It's only in teaching purpose, how to get 4 elements from Map
+	 * @param <K> must be Integer, otherwise return null.		
+	 * @param <V> any Object's.
+	 * @param map see description above.
+	 * @param descendingOrder flag, how to build order.
+	 * @return map, which consist exactly from 4 elements of previous collection.
+	 */
+	public static <K, V> Map<K, V> getFourElements(TreeMap<K, V> map, boolean descendingOrder) {
+		if (map.firstKey() instanceof Integer) {
+			boolean even = Integer.valueOf(map.firstKey().toString()) % 2 == 0 ? true : false;
+			int size = 4;
+			int index = 0;
+			TreeMap<K, V> tree = new TreeMap<>();
+			K key = null;
+			if (even) {
+				key = map.lastKey();
+				while (true) {
+					tree.put(key, map.get(key));
+					key = map.lowerKey(key);
+					index++;
+					if (index == size) {
+						break;
+					}
+				}
+			} else {
+				key = map.firstKey();
+				while (true) {
+					tree.put(key, map.get(key));
+					key = map.higherKey(key);
+					index++;
+					if (index == size) {
+						break;
+					}
+				}
+			}
+			return descendingOrder ? tree.descendingMap() : tree;
+		}
+		return null;
+	}
 }

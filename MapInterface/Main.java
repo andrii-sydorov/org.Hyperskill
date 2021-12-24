@@ -19,11 +19,14 @@ import java.util.HashMap;
  * 
  * Sample Input 1:
  * 
- * a:Abstraction b:Boolean c:xyz
+ * a:Abstraction 
+ * b:Boolean 
+ * c:xyz
  * 
  * Sample Output 1:
  * 
- * a:Abstraction b:Abstraction
+ * a:Abstraction 
+ * b:Abstraction
  * 
  * @author SMD_ASY
  *

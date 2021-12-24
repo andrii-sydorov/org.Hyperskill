@@ -60,7 +60,6 @@ public class SpellChecker {
 		index = 0;
 		while (index != numOfLinesInText) {
 			Collections.addAll(text, sc.nextLine().split("\\s+"));
-			text.forEach(x -> x.toLowerCase());
 			index++;
 		}
 		sc.close();

@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 
@@ -44,10 +47,10 @@ class Game {
 	}
 
 	public void createCards() {
-		Term t = new Term();
-		Definition d = new Definition();
 		for (int i = 0; i < numberOfCards;) {
 			System.out.println("Card #" + (i + 1) + ":");
+			Term t = new Term();
+			Definition d = new Definition();
 			while (true) {
 				String term = sc.nextLine();
 				t.setTerm(term);
@@ -71,6 +74,13 @@ class Game {
 			c.add(new Card(t, d));
 			i++;
 		}
+		System.out.println(getClassName(c));
+	}
+
+	private String getClassName(Set<Card> st) {
+		Iterator<Card> it = st.iterator();
+		Object ob = it.next();
+		return ob.getClass().getSimpleName();
 	}
 
 	public void createUser() {

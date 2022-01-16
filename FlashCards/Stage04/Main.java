@@ -4,7 +4,7 @@ package FlashCards.Stage04;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -41,37 +41,48 @@ class Game {
 
 	public Game() {
 		c = new HashSet<>();
-		m = new HashMap<>();
+		m = new LinkedHashMap<>();
 	}
 
 	public void createCards() {
-		Term t = new Term();
-		Definition d = new Definition();
+		Term[] t = new Term[numberOfCards];
+		Definition[] d = new Definition[numberOfCards];
 		for (int i = 0; i < numberOfCards;) {
+			t[i] = new Term();
 			System.out.println("Card #" + (i + 1) + ":");
 			while (true) {
 				String term = sc.nextLine();
-				t.setTerm(term);
-				if (m.containsKey(t)) {
+				t[i].setTerm(term);
+				if (m.containsKey(t[i])) {
 					System.out.println("The term \"" + term + "\" already exists. Try again:");
 					continue;
 				}
 				break;
 			}
 			System.out.println("The definition for " + "card #" + (i + 1) + ":");
+			d[i] = new Definition();
 			while (true) {
 				String definition = sc.nextLine();
-				d.setDefinition(definition);
-				if (m.values().contains(d)) {
+				d[i].setDefinition(definition);
+				if (m.values().contains(d[i])) {
 					System.out.println("The definition \"" + definition + "\" already exists. Try again:");
 					continue;
 				}
 				break;
 			}
-			m.put(t, d);
-			c.add(new Card(t, d));
+			m.put(t[i], d[i]);
+			c.add(new Card(t[i], d[i]));
 			i++;
 		}
+	}
+	
+	private boolean contains(Collection<Definition> col, Definition def) {
+		for (Definition d : col) {
+			if (d.getDefinition().equals(def.getDefinition())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void createUser() {
@@ -92,7 +103,8 @@ class Game {
 		Collection<Definition> col = m.values();
 		for (Term t : m.keySet()) {
 			System.out.println("Print the definition of \"" + t.getTerm() + "\":");
-			String definition = sc.nextLine();
+			us.setAnswer(sc);
+			String definition = us.getAnswer();
 			Definition def = new Definition();
 			def.setDefinition(definition);
 			if (definition.equals(m.get(t).getDefinition())) {
@@ -121,6 +133,7 @@ class Game {
 				: "Wrong. The right answer is " + "\"" + cd.getDefinition() + "\".";
 	}
 }
+
 
 class Term {
 

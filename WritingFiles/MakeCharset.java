@@ -1,6 +1,7 @@
 package WritingFiles;
 
 import java.nio.charset.Charset;
+import java.util.SortedMap;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -21,6 +22,11 @@ public class MakeCharset {
 			e.printStackTrace();
 		}
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		SortedMap <String, Charset> st = Charset.availableCharsets();
+		//st.forEach((key, value) -> System.out.println(key + " " + value));
+		for (Charset c : st.values()) {
+			System.out.println(c);
+		}
 	}
 
 }

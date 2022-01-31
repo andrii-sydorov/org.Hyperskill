@@ -1,20 +1,19 @@
 package FlashCards.Stage05;
 
-import java.util.Scanner;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
-import java.util.HashSet;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
 
 public class Main {
 
@@ -68,11 +67,11 @@ class Game {
 				break;
 			case "export":
 				// TODO
-				// exportCard();
+				exportCard();
 				break;
 			case "ask":
 				// TODO
-				// askUser();
+				askCard();
 				break;
 			case "exit":
 				// TODO
@@ -80,31 +79,68 @@ class Game {
 				sayBye();
 				break;
 			}
+			System.out.println();
 		}
+	}
+
+	private void askCard() {
+		// TODO Auto-generated method stub
+		System.out.println("How many times to ask?");
+		int numberOfAsks = Integer.valueOf(sc.nextLine());
+		Collection<String> col = m.values();
+		for (String term : m.keySet()) {
+			if (numberOfAsks == 0) {
+				break;
+			}
+			System.out.println("Print the definition of \"" + term + "\":");
+			us.setAnswer(sc);
+			String definition = us.getAnswer();
+			if (definition.equals(m.get(term))) {
+				System.out.println("Correct!");
+			} else if (col.contains(definition)) {
+				System.out.println("Wrong. The right answer is \"" + m.get(term)
+						+ "\", but your definition is correct for \"" + findKey(m, definition) + "\".");
+			} else {
+				System.out.println("Wrong. The right answer is \"" + m.get(term) + "\"");
+			}
+			numberOfAsks--;
+		}
+	}
+
+	public void exportCard() {
+		System.out.println("File name:");
+		String fileName = sc.nextLine();
+		try (PrintWriter writer = new PrintWriter(fileName);) {
+			for (Card cd : c) {
+				writer.println(cd.getTerm());
+				writer.println(cd.getDefinition());
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		System.out.println(c.size() + " cards have been saved.");
 	}
 
 	public void addCard() {
 		String term = null;
 		String definition = null;
+
 		System.out.println("Card:");
-		while (true) {
-			term = sc.nextLine();
-			if (m.containsKey(term)) {
-				return;
-			}
-			break;
+		term = sc.nextLine();
+		if (m.containsKey(term)) {
+			System.out.println("The card " + "\"" + term + "\"" + " already exists.");
+			return;
 		}
+
 		System.out.println("The definition of the card:");
-		while (true) {
-			definition = sc.nextLine();
-			if (m.values().contains(definition)) {
-				return;
-			}
-			break;
+		definition = sc.nextLine();
+		if (m.values().contains(definition)) {
+			System.out.println("The definition " + "\"" + definition + "\"" + " already exists.");
+			return;
 		}
 		m.put(term, definition);
 		c.add(new Card(term, definition));
-		System.out.println("The pair (\"" + term + "\"" + ":" + "\"" + definition + "\")" + "has been added.");
+		System.out.println("The pair (\"" + term + "\"" + ":" + "\"" + definition + "\")" + " has been added.");
 	}
 
 	public void removeCard() {
@@ -112,9 +148,23 @@ class Game {
 		String term = sc.nextLine();
 		if (m.containsKey(term)) {
 			m.remove(term);
+			Iterator <Card> it = c.iterator();
+			while (it.hasNext()) {
+				if (it.next().getTerm().equals(term)) {
+					it.remove();
+					break;
+				}
+			}
 			System.out.println("The card has been removed.");
 		} else {
 			System.out.println("Can't remove \"" + term + "\"" + ": there is no such card.");
+		}
+		printCard();
+	}
+
+	public void printCard() {
+		for (Card cd : c) {
+			System.out.println("Card: " + cd.getTerm() + " " + cd.getDefinition());
 		}
 	}
 
@@ -122,19 +172,29 @@ class Game {
 		System.out.println("File name: ");
 		String file = sc.nextLine();
 		List<String> ls = readFileAsString(file);
-		int count = ls.size() / 2;
-		for (int i = 0, j = 0; i < count; i++) {
-			String term = ls.get(j);
-			String definition = ls.get(j + 1);
+		int count = 0;
+		if (ls.size() % 2 == 0) {
+			ls.remove(ls.size() - 1);
+		}
+		for (int i = 0; i < ls.size() / 2; i += 2) {
+			String term = ls.get(i);
+			String definition = ls.get(i + 1);
+			Iterator<Card> it = c.iterator();
+			while (it.hasNext()) {
+				if (it.next().getTerm().equals(term)) {
+					it.remove();
+					m.remove(term);
+				}
+			}
+			m.put(term, definition);
 			c.add(new Card(term, definition));
-			j++;
+
 		}
 		System.out.println(count + " cards have been loaded.");
 	}
 
 	public static List<String> readFileAsString(String fileName) {
 		List<String> ls = new ArrayList<>();
-		
 		try (BufferedReader bf = new BufferedReader(new FileReader(fileName))) {
 			while (true) {
 				String line = bf.readLine();
@@ -145,7 +205,7 @@ class Game {
 			}
 		} catch (IOException ioe) {
 			System.out.println("File not found.");
-		} 
+		}
 		return ls;
 	}
 
@@ -195,7 +255,7 @@ class Game {
 		}
 	}
 
-	public void askningUser() {
+	public void askingUser() {
 		Collection<String> col = m.values();
 		for (String term : m.keySet()) {
 			System.out.println("Print the definition of \"" + term + "\":");
@@ -210,7 +270,6 @@ class Game {
 				System.out.println("Wrong. The right answer is \"" + m.get(term) + "\"");
 			}
 		}
-
 	}
 
 	private String findKey(Map<String, String> m, String definition) {

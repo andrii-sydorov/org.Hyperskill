@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +41,7 @@ class Game {
 	public Game() {
 		c = new HashSet<>();
 		m = new LinkedHashMap<>();
+		createUser();
 	}
 
 	public void printAvaliableOptions() {
@@ -148,13 +148,7 @@ class Game {
 		String term = sc.nextLine();
 		if (m.containsKey(term)) {
 			m.remove(term);
-			Iterator <Card> it = c.iterator();
-			while (it.hasNext()) {
-				if (it.next().getTerm().equals(term)) {
-					it.remove();
-					break;
-				}
-			}
+			c.removeIf(s -> s.getTerm().equals(term));
 			System.out.println("The card has been removed.");
 		} else {
 			System.out.println("Can't remove \"" + term + "\"" + ": there is no such card.");
@@ -172,23 +166,20 @@ class Game {
 		System.out.println("File name: ");
 		String file = sc.nextLine();
 		List<String> ls = readFileAsString(file);
+		if (ls.size() == 0) {
+			return;
+		}
 		int count = 0;
-		if (ls.size() % 2 == 0) {
+		if (ls.size() % 2 != 0) {
 			ls.remove(ls.size() - 1);
 		}
-		for (int i = 0; i < ls.size() / 2; i += 2) {
+		for (int i = 0; i < ls.size(); i += 2) {
 			String term = ls.get(i);
 			String definition = ls.get(i + 1);
-			Iterator<Card> it = c.iterator();
-			while (it.hasNext()) {
-				if (it.next().getTerm().equals(term)) {
-					it.remove();
-					m.remove(term);
-				}
-			}
+			c.removeIf(s -> s.getTerm().equals(term));
 			m.put(term, definition);
 			c.add(new Card(term, definition));
-
+			count++;
 		}
 		System.out.println(count + " cards have been loaded.");
 	}
@@ -213,33 +204,33 @@ class Game {
 		System.out.println("Bye bye!");
 	}
 
-	public void createCards() {
-		String term = null;
-		String definition = null;
-		for (int i = 0; i < numberOfCards;) {
-			System.out.println("Card #" + (i + 1) + ":");
-			while (true) {
-				term = sc.nextLine();
-				if (m.containsKey(term)) {
-					System.out.println("The term \"" + term + "\" already exists. Try again:");
-					continue;
-				}
-				break;
-			}
-			System.out.println("The definition for " + "card #" + (i + 1) + ":");
-			while (true) {
-				definition = sc.nextLine();
-				if (m.values().contains(definition)) {
-					System.out.println("The definition \"" + definition + "\" already exists. Try again:");
-					continue;
-				}
-				break;
-			}
-			m.put(term, definition);
-			c.add(new Card(term, definition));
-			i++;
-		}
-	}
+//	public void createCards() {
+//		String term = null;
+//		String definition = null;
+//		for (int i = 0; i < numberOfCards;) {
+//			System.out.println("Card #" + (i + 1) + ":");
+//			while (true) {
+//				term = sc.nextLine();
+//				if (m.containsKey(term)) {
+//					System.out.println("The term \"" + term + "\" already exists. Try again:");
+//					continue;
+//				}
+//				break;
+//			}
+//			System.out.println("The definition for " + "card #" + (i + 1) + ":");
+//			while (true) {
+//				definition = sc.nextLine();
+//				if (m.values().contains(definition)) {
+//					System.out.println("The definition \"" + definition + "\" already exists. Try again:");
+//					continue;
+//				}
+//				break;
+//			}
+//			m.put(term, definition);
+//			c.add(new Card(term, definition));
+//			i++;
+//		}
+//	}
 
 	public void createUser() {
 		us = new User();

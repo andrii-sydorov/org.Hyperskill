@@ -1,6 +1,8 @@
-RUSSIA
-MOSCOW
-UKRAINE
-KIEV
-japan
-Tokyo
+France
+Paris
+Great Britain
+London
+Ukraine
+Kiev
+Russia
+Moscow

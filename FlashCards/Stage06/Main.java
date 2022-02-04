@@ -167,7 +167,7 @@ class Game {
 			} else {
 				System.out.println("Wrong. The right answer is \"" + m.get(term) + "\"");
 			}
-			incrementError(c, definition);
+			incrementError(c, term);
 		}
 	}
 
@@ -296,9 +296,9 @@ class Game {
 		return null;
 	}
 
-	private void incrementError(Set<Card> c, String definition) {
+	private void incrementError(Set<Card> c, String term) {
 		for (Card cd : c) {
-			if (cd.getDefinition().equals(definition)) {
+			if (cd.getTerm().equals(term)) {
 				cd.incErrors();
 			}
 		}

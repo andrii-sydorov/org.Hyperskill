@@ -1,0 +1,10 @@
+France
+Paris
+Russia
+Moscow
+/src/FlashCrads/Stage06/imports.txt
+/src/FlashCrads/Stage06/exports.txt
+/src/FlashCards/Stage06/exports.txt
+./src/FlashCards/Stage06/exports.txt
+1
+Moscow

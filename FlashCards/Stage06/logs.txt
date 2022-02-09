@@ -1,18 +1,31 @@
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+There are no cards with errors.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+import
+File name: 
 ./src/FlashCards/Stage06/imports.txt
-France
-Paris
-Spain
-Madrid
-Poland
-Warsaw
-./src/FlashCards/Stage06/exports.txt
-3
-Kiev
-Kiev
-Madrid
-./src/FlashCards/Stage06/exports.txt
+6 cards have been loaded.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest card is "Ukraine". You have 1 errors answering it.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+ask
+How many times to ask?
 1
-Minsk
-./src/FlashCards/Stage06/imports.txt
-./src/FlashCards/Stage06/exports.txt
-./src/FlashCards/Stage06/exports.txt
+Print the definition of "Ukraine":
+Kiev
+Correct!
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest card is "Ukraine". You have 1 errors answering it.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+reset stats
+Card statistics have been reset.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+There are no cards with errors.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+log
+File name:
+./src/FlashCards/Stage06/logs.txt

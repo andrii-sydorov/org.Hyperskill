@@ -56,6 +56,7 @@ class Game {
 		while (!exit) {
 			printAvaliableOptions();
 			String option = sc.nextLine();
+			log.add(option);
 			switch (option) {
 			case "add":
 				addCard();
@@ -112,7 +113,7 @@ class Game {
 	}
 
 	public void hardestCard() {
-		int numberOfMaxErrors = Integer.MIN_VALUE;
+		int numberOfMaxErrors = 0;
 		List<String> lsToPrint = new ArrayList<>();
 		for (Card cd : c) {
 			if (cd.getErrors() > numberOfMaxErrors) {
@@ -127,9 +128,9 @@ class Game {
 			System.out.println("There are no cards with errors.");
 		} else {
 			String res = lsToPrint.size() == 1
-					? "The hardest card is " + terms(lsToPrint) + " . You have " + numberOfMaxErrors
+					? "The hardest card is " + terms(lsToPrint) + ". You have " + numberOfMaxErrors
 							+ " errors answering it."
-					: "The hardest card are " + terms(lsToPrint) + " . You have " + numberOfMaxErrors
+					: "The hardest cards are " + terms(lsToPrint) + ". You have " + numberOfMaxErrors
 							+ "  errors answering them.";
 			System.out.println(res);
 		}
@@ -252,7 +253,7 @@ class Game {
 		for (int i = 0; i < ls.size(); i += 3) {
 			String term = ls.get(i);
 			String definition = ls.get(i + 1);
-			int error = Integer.valueOf(i + 2);
+			int error = Integer.valueOf(ls.get(i + 2));
 			c.removeIf(s -> s.getTerm().equals(term));
 			m.put(term, definition);
 			Card cd = new Card(term, definition);

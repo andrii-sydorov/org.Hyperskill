@@ -19,15 +19,10 @@ import java.util.HashMap;
 public class Main {
 
 	private static Scanner sc = new Scanner(System.in);
-	private static Map<String, String> commandLineArguments;
-
-	public Main() {
-		commandLineArguments = new HashMap<>();
-	}
 
 	public static void main(String[] args) {
-		commandLineArguments = buildMap(args);
-		Game g = new Game();
+		Map<String, String> commandLineArguments = buildMap(args);
+		Game g = new Game(commandLineArguments);
 		g.sc = sc;
 		g.mainMenu();
 		sc.close();
@@ -39,7 +34,7 @@ public class Main {
 			return null;
 		}
 		Map<String, String> map = new HashMap<>();
-		for (int i = 0; i < args.length; i++) {
+		for (int i = 0; i < args.length; i += 2) {
 			map.put(args[i], args[i + 1]);
 		}
 		return map;
@@ -52,10 +47,10 @@ class Game {
 	private static String[] options = { "add", "remove", "import", "export", "ask", "exit", "log", "hardest card",
 			"reset stats" };
 
-	private Boolean importBefore;
-	private Boolean exportAfter;
+	private String pathToImport;
+	private String pathToExport;
 	private String[] settingsOptions = { "-import", "-export" };
-	private Boolean[] booleanOptions = { importBefore, exportAfter };
+	private String[] pathToFile = new String[settingsOptions.length];
 	private Map<String, String> map;
 	private Map<String, String> m;
 	private Set<Card> c;
@@ -72,7 +67,7 @@ class Game {
 	}
 
 	public Game(Map<String, String> commands) {
-		super();
+		this();
 		map = commands;
 	}
 
@@ -84,8 +79,10 @@ class Game {
 
 	public void mainMenu() {
 		additionalOptions();
-		if (importBefore) {
-			importCard(map.get("-import"));
+		pathToImport = pathToFile[0];
+		pathToExport = pathToFile[1];
+		if (pathToImport != null) {
+			importCard(pathToImport);
 		}
 		boolean exit = false;
 		while (!exit) {
@@ -93,37 +90,37 @@ class Game {
 			String option = sc.nextLine();
 			log.add(option);
 			switch (option) {
-				case "add":
-					addCard();
-					break;
-				case "remove":
-					removeCard();
-					break;
-				case "import":
-					importCard(null);
-					break;
-				case "export":
-					exportCard(null);
-					break;
-				case "ask":
-					askCard();
-					break;
-				case "log":
-					showLog();
-					break;
-				case "hardest card":
-					hardestCard();
-					break;
-				case "reset stats":
-					resetStats();
-					break;
-				case "exit":
-					exit = true;
-					sayBye();
-					if (exportAfter) {
-						exportCard(map.get("-export"));
-					}
-					break;
+			case "add":
+				addCard();
+				break;
+			case "remove":
+				removeCard();
+				break;
+			case "import":
+				importCard(null);
+				break;
+			case "export":
+				exportCard(null);
+				break;
+			case "ask":
+				askCard();
+				break;
+			case "log":
+				showLog();
+				break;
+			case "hardest card":
+				hardestCard();
+				break;
+			case "reset stats":
+				resetStats();
+				break;
+			case "exit":
+				exit = true;
+				sayBye();
+				if (pathToExport != null) {
+					exportCard(pathToExport);
+				}
+				break;
 			}
 			String emptyLine = "\n";
 			log.add(emptyLine);
@@ -138,7 +135,7 @@ class Game {
 		for (Map.Entry<String, String> entr : map.entrySet()) {
 			for (int i = 0; i < settingsOptions.length; i++) {
 				if (entr.getKey().equals(settingsOptions[i])) {
-					booleanOptions[i] = true;
+					pathToFile[i] = map.get(settingsOptions[i]);
 					break;
 				}
 			}

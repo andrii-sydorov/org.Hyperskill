@@ -279,6 +279,13 @@ class Game {
 			incrementError(c, term);
 		}
 	}
+	
+	/**
+	 * Difference from previous version, now it's possible upload data during and after programm execution.
+	 * In case after, if command line arguments contain key-word and path, to file, where data should be stored.
+	 * @param fileName It goes from command line arguments and from console input. If command line doesn't contain 
+	 * key-word, fileName equals null.
+	 */
 
 	public void exportCard(String fileName) {
 		if (fileName == null || fileName.length() == 0) {
@@ -362,7 +369,13 @@ class Game {
 			System.out.println(toPrint);
 		}
 	}
-
+	
+	/**
+	 * Difference before previous variant, import the datas now is possible before asking the next
+	 * steps, if programm contains additional arguments. In function is two workflow, that depends on
+	 * input String data.
+	 * @param file before execution, the path to file, from which we want to download data.
+	 */
 	public void importCard(String file) {
 		if (file == null || file.length() == 0) {
 			String fileToImport = "File name: ";

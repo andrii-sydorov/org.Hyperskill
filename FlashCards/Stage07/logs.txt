@@ -1,0 +1,28 @@
+4 cards have been loaded.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+Card:
+Farnce
+The definition of the card:
+Paris
+The pair ("Farnce":"Paris") has been added.
+
+
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+Card:
+Spain
+The definition of the card:
+Nadrid
+The pair ("Spain":"Nadrid") has been added.
+
+
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest card is "Italia". You have 2 errors answering it.
+
+
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+log
+File name:
+./src/FlashCards/Stage07/logs.txt

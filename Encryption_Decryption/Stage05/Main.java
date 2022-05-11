@@ -111,6 +111,7 @@ public class Main {
 
 	private static String buildDataFromFile(String file) throws myException {
 		String ans = null;
+		file = ".src/Encryption_Decryption/Stage05/" + file;
 		try {
 			ans = new String(Files.readAllBytes(Paths.get(file)));
 		} catch (IOException ioe) {

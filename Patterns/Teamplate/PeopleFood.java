@@ -1,4 +1,4 @@
-package TemplateMethod;
+package Patterns.Teamplate;
 
 import java.util.Scanner;
 

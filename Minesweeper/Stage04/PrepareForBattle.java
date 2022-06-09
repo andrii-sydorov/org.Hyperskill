@@ -239,7 +239,6 @@ public class PrepareForBattle {
 			}
 			workWithCoordinates(coordinates);
 			printField();
-			// System.out.println(numberOfMines + " " + numberOfRefusedMines);
 		}
 		System.out.println();
 		printCongratulations();

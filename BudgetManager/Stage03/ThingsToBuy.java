@@ -22,7 +22,6 @@ public class ThingsToBuy {
 		while (isRunning) {
 			print();
 			getUserChoice(sc);
-			System.out.println();
 			switch (userChoice) {
 			case 1:
 				m = Menu.INCOME;
@@ -52,6 +51,7 @@ public class ThingsToBuy {
 	}
 
 	private static void addPurchase(Scanner sc) {
+		System.out.println();
 		Purchases p = null;
 		boolean isPurchaseOn = true;
 		while (isPurchaseOn) {
@@ -83,6 +83,7 @@ public class ThingsToBuy {
 		if (p == null || p == Purchases.BACK) {
 			return;
 		}
+		System.out.println();
 		System.out.println("Enter purchase name:");
 		String key = sc.nextLine();
 		System.out.println("Enter its price:");
@@ -90,6 +91,7 @@ public class ThingsToBuy {
 		p.map.put(key, value);
 		System.out.println("Purchase was added!");
 		balance -= value;
+		System.out.println();
 	}
 
 	private static void getPurchase(Scanner sc) {
@@ -104,6 +106,7 @@ public class ThingsToBuy {
 	}
 
 	private static void showListOfPurchase(Scanner sc) {
+		System.out.println();
 		if (isEmpty()) {
 			System.out.println("The purchase list is empty!");
 			return;
@@ -137,6 +140,7 @@ public class ThingsToBuy {
 	}
 
 	private static void showPurchasesAll() {
+		System.out.println();
 		System.out.println("All: ");
 		if (food.map.size() != 0) {
 			food.map.forEach((k, v) -> System.out.println(k + " $" + v));
@@ -152,6 +156,7 @@ public class ThingsToBuy {
 		}
 		System.out.println(
 				"Total sum: $" + (food.getBalance() + cloth.getBalance() + ent.getBalance() + oth.getBalance()));
+		System.out.println();
 	}
 
 	private static boolean isEmpty() {
@@ -159,6 +164,7 @@ public class ThingsToBuy {
 	}
 
 	private static void showPurchase(Purchases p) {
+		System.out.println();
 		System.out.println(p.getName() + ":");
 		if (p.map.size() == 0) {
 			System.out.println("The purchase list is empty");
@@ -166,6 +172,7 @@ public class ThingsToBuy {
 			p.map.forEach((k, v) -> System.out.println(k + " $" + v));
 			System.out.println("Total sum: $" + p.getBalance());
 		}
+		System.out.println();
 	}
 
 	private static void getUserChoiceListToShow(Scanner sc) {
@@ -180,12 +187,17 @@ public class ThingsToBuy {
 	}
 
 	private static void addIncome(Scanner sc) {
+		System.out.println();
 		System.out.println("Enter income: ");
 		balance += Integer.valueOf(sc.nextLine());
 		System.out.println("Income was added!");
 	}
 
 	private static void showBalance() {
+		System.out.println();
+		if (balance < 0) {
+			balance = 0;
+		}
 		System.out.println("Balance: $" + balance);
 	}
 
@@ -254,6 +266,7 @@ enum Purchases {
 	}
 
 	public double getBalance() {
+		balance = 0;
 		for (Map.Entry<String, Double> entr : map.entrySet()) {
 			balance += entr.getValue();
 		}

@@ -1,50 +1,55 @@
-package BudgetManager.Stage03;
+package BudgetManager.Stage04;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
 /**
- *  Oh the things you can buy 
+ * Memorable purchases 
  * 
- * Description
+ * What's the point of counting the money if the results are lost and forgotten
+ * once you close the program? To allow for some long-term budget planning, we
+ * need to save purchases to file. Add items Save and Load to the menu.
  * 
- * To better control the expenses, we need to categorize our purchases. It helps
- * to see how exactly your budget is distributed: you may be actually quite
- * surprised!
+ * Save should save all purchases to the file.
+ * Load should load all purchases from the file.
  * 
- * Implement a function that assigns a purchase to a specific category.
+ * Use the purchases.txt file to store purchases.
  * 
- * The program should have the following categories:
- * Food
- * Clothes
- * Entertainment
- * Other
- * 
- * The function allows you to output the shopping list by type. After selecting
- * the action of showing the list of expenses, offer to show either a certain
- * category or a general list. At the end print the total amount of purchases
- * that are on the list.
- * Example
- * 
+ * Examples
  * The greater-than symbol followed by a space (> ) represents the user input.
  * Notice that it's not part of the input.
  * 
+ * Example 1:
+ * 
  * Choose your action:
  * 1) Add income
  * 2) Add purchase
  * 3) Show list of purchases
  * 4) Balance
+ * 5) Save
+ * 6) Load
  * 0) Exit
- * > 3
+ * > 1
  * 
- * The purchase list is empty!
+ * Enter income:
+ * > 1000
+ * Income was added!
  * 
  * Choose your action:
  * 1) Add income
  * 2) Add purchase
  * 3) Show list of purchases
  * 4) Balance
+ * 5) Save
+ * 6) Load
  * 0) Exit
  * > 2
  * 
@@ -57,9 +62,9 @@ import java.util.Scanner;
  * > 1
  * 
  * Enter purchase name:
- * > Milk
+ * > Almond 250g
  * Enter its price:
- * > 3.5
+ * > 35.43
  * Purchase was added!
  * 
  * Choose the type of purchase
@@ -75,20 +80,47 @@ import java.util.Scanner;
  * 2) Add purchase
  * 3) Show list of purchases
  * 4) Balance
+ * 5) Save
+ * 6) Load
+ * 0) Exit
+ * > 5
+ * 
+ * Purchases were saved!
+ * 
+ * Choose your action:
+ * 1) Add income
+ * 2) Add purchase
+ * 3) Show list of purchases
+ * 4) Balance
+ * 5) Save
+ * 6) Load
+ * 0) Exit
+ * > 0
+ * 
+ * Bye!
+ * Example 2:
+ * 
+ * Choose your action:
+ * 1) Add income
+ * 2) Add purchase
+ * 3) Show list of purchases
+ * 4) Balance
+ * 5) Save
+ * 6) Load
+ * 0) Exit
+ * > 6
+ * 
+ * Purchases were loaded!
+ * 
+ * Choose your action:
+ * 1) Add income
+ * 2) Add purchase
+ * 3) Show list of purchases
+ * 4) Balance
+ * 5) Save
+ * 6) Load
  * 0) Exit
  * > 3
- * 
- * Choose the type of purchases
- * 1) Food
- * 2) Clothes
- * 3) Entertainment
- * 4) Other
- * 5) All
- * 6) Back
- * > 4
- * 
- * Other:
- * The purchase list is empty!
  * 
  * Choose the type of purchases
  * 1) Food
@@ -100,8 +132,8 @@ import java.util.Scanner;
  * > 1
  * 
  * Food:
- * Milk $3.50
- * Total sum: $3.50
+ * Almond 250g $35.43
+ * Total sum: $35.43
  * 
  * Choose the type of purchases
  * 1) Food
@@ -113,8 +145,8 @@ import java.util.Scanner;
  * > 5
  * 
  * All:
- * Milk $3.50
- * Total sum: $3.50
+ * Almond 250g $35.43
+ * Total sum: $35.43
  * 
  * Choose the type of purchases
  * 1) Food
@@ -130,24 +162,54 @@ import java.util.Scanner;
  * 2) Add purchase
  * 3) Show list of purchases
  * 4) Balance
+ * 5) Save
+ * 6) Load
+ * 0) Exit
+ * > 4
+ * 
+ * Balance: $964.57
+ * 
+ * Choose your action:
+ * 1) Add income
+ * 2) Add purchase
+ * 3) Show list of purchases
+ * 4) Balance
+ * 5) Save
+ * 6) Load
  * 0) Exit
  * > 0
  * 
  * Bye!
  */
-public class ThingsToBuy {
+
+public class MemoryPurchases {
 
 	private static int userChoice;
 	private static double balance;
-	private static int kindOfPurchase;
-	private static int purchaseToShow;
 	private static Purchases food = Purchases.FOOD;
 	private static Purchases cloth = Purchases.CLOTHES;
 	private static Purchases ent = Purchases.ENTERTAINMENT;
 	private static Purchases oth = Purchases.OTHER;
+	private static String pathToFile = "./purchases.txt";
+	private static File f;
+	private static String purchases;
+	private static NumberFormat nfe;
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	static {
+		f = new File(pathToFile);
+		try {
+			f.createNewFile();
+		} catch (IOException ioe) {
+			System.out.println("File couldn't be created!");
+		}
+		purchases = null;
+		nfe = NumberFormat.getInstance(Locale.US);
+		nfe.setMinimumFractionDigits(2);
+		nfe.setMinimumFractionDigits(2);
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+		Scanner sc = new Scanner(System.in).useLocale(Locale.US);
 		boolean isRunning = true;
 		Menu m = null;
 		while (isRunning) {
@@ -170,6 +232,14 @@ public class ThingsToBuy {
 					m = Menu.BALANCE;
 					showBalance();
 					break;
+				case 5:
+					m = Menu.SAVE;
+					saveListOfPurchases();
+					break;
+				case 6:
+					m = Menu.LOAD;
+					loadListOfPurchases();
+					break;
 				case 0:
 					m = Menu.EXIT;
 					isRunning = false;
@@ -181,14 +251,79 @@ public class ThingsToBuy {
 		sc.close();
 	}
 
+	private static void loadListOfPurchases() throws FileNotFoundException {
+		Scanner sc = new Scanner(f);
+		Purchases p = null;
+		while (sc.hasNext()) {
+			String s = sc.nextLine();
+			switch (s) {
+				case "Food:":
+					p = food;
+					continue;
+				case "Clothes:":
+					p = cloth;
+					continue;
+				case "Entertainment:":
+					p = ent;
+					continue;
+				case "Other:":
+					p = oth;
+					continue;
+				case "Balance:":
+					balance = Double.valueOf(sc.nextLine());
+				default:
+					break;
+			}
+			if (s.length() != 0 && s.contains("$")) {
+				p.map.put(s.substring(0, s.lastIndexOf("$") - 1), Double.valueOf(s.substring(s.lastIndexOf("$") + 1)));
+			}
+		}
+		sc.close();
+		System.out.println();
+		System.out.println("Purchases were loaded!");
+	}
+
+	private static void saveListOfPurchases() {
+		try (PrintWriter p = new PrintWriter(f)) {
+			dataToSave();
+			p.println(purchases);
+		} catch (IOException ioe) {
+			System.out.println("The data couldn't be stored!");
+		}
+		System.out.println("Purchases were saved!");
+	}
+
+	private static void dataToSave() {
+		StringBuilder sb = new StringBuilder();
+		Purchases[] pur = new Purchases[] { food, cloth, ent, oth };
+		String[] name = { "Food:", "Clothes:", "Entertainment:", "Other:" };
+		int index = 0;
+		for (Purchases p : pur) {
+			if (p.map.size() != 0) {
+				sb.append(name[index] + "\n").append(dataFromMap(p));
+			}
+			index++;
+		}
+		sb.append("Balance:\n").append(balance);
+		purchases = sb.toString();
+	}
+
+	private static String dataFromMap(Purchases p) {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, Double> entr : p.map.entrySet()) {
+			sb.append(entr.getKey() + " $" + entr.getValue()).append("\n");
+		}
+		return sb.toString();
+	}
+
 	private static void addPurchase(Scanner sc) {
 		System.out.println();
 		Purchases p = null;
 		boolean isPurchaseOn = true;
 		while (isPurchaseOn) {
 			printPurchases();
-			getPurchase(sc);
-			switch (kindOfPurchase) {
+			getUserChoice(sc);
+			switch (userChoice) {
 				case 1:
 					p = food;
 					break;
@@ -221,12 +356,7 @@ public class ThingsToBuy {
 		double value = Double.valueOf(sc.nextLine());
 		p.map.put(key, value);
 		System.out.println("Purchase was added!");
-		balance -= value;
 		System.out.println();
-	}
-
-	private static void getPurchase(Scanner sc) {
-		kindOfPurchase = Integer.valueOf(sc.nextLine());
 	}
 
 	private static void printPurchases() {
@@ -245,8 +375,8 @@ public class ThingsToBuy {
 		boolean isPurchaseListToShow = true;
 		while (isPurchaseListToShow) {
 			printListOfPurchases();
-			getUserChoiceListToShow(sc);
-			switch (purchaseToShow) {
+			getUserChoice(sc);
+			switch (userChoice) {
 				case 1:
 					showPurchase(food);
 					break;
@@ -274,19 +404,19 @@ public class ThingsToBuy {
 		System.out.println();
 		System.out.println("All: ");
 		if (food.map.size() != 0) {
-			food.map.forEach((k, v) -> System.out.println(k + " $" + v));
+			food.map.forEach((k, v) -> System.out.println(k + " $" + nfe.format(v)));
 		}
 		if (cloth.map.size() != 0) {
-			cloth.map.forEach((k, v) -> System.out.println(k + " $" + v));
+			cloth.map.forEach((k, v) -> System.out.println(k + " $" + nfe.format(v)));
 		}
 		if (ent.map.size() != 0) {
-			ent.map.forEach((k, v) -> System.out.println(k + " $" + v));
+			ent.map.forEach((k, v) -> System.out.println(k + " $" + nfe.format(v)));
 		}
 		if (oth.map.size() != 0) {
-			oth.map.forEach((k, v) -> System.out.println(k + " $" + v));
+			oth.map.forEach((k, v) -> System.out.println(k + " $" + nfe.format(v)));
 		}
-		System.out.println(
-				"Total sum: $" + (food.getBalance() + cloth.getBalance() + ent.getBalance() + oth.getBalance()));
+		System.out.println("Total sum: $"
+				+ nfe.format(food.getBalance() + cloth.getBalance() + ent.getBalance() + oth.getBalance()));
 		System.out.println();
 	}
 
@@ -300,14 +430,10 @@ public class ThingsToBuy {
 		if (p.map.size() == 0) {
 			System.out.println("The purchase list is empty");
 		} else {
-			p.map.forEach((k, v) -> System.out.println(k + " $" + v));
-			System.out.println("Total sum: $" + p.getBalance());
+			p.map.forEach((k, v) -> System.out.println(k + " $" + nfe.format(v)));
+			System.out.println("Total sum: $" + nfe.format(p.getBalance()));
 		}
 		System.out.println();
-	}
-
-	private static void getUserChoiceListToShow(Scanner sc) {
-		purchaseToShow = Integer.valueOf(sc.nextLine());
 	}
 
 	private static void printListOfPurchases() {
@@ -326,10 +452,17 @@ public class ThingsToBuy {
 
 	private static void showBalance() {
 		System.out.println();
+		for (Purchases p : Purchases.values()) {
+			if (p.map.size() != 0) {
+				for (Map.Entry<String, Double> entr : p.map.entrySet()) {
+					balance -= entr.getValue();
+				}
+			}
+		}
 		if (balance < 0) {
 			balance = 0;
 		}
-		System.out.println("Balance: $" + balance);
+		System.out.println("Balance: $" + nfe.format(balance));
 	}
 
 	private static void getUserChoice(Scanner sc) {
@@ -346,7 +479,7 @@ public class ThingsToBuy {
 
 enum Menu {
 	INCOME(1, "Add income"), PURCHASE(2, "Add purchase"), LISTOFPURCHASE(3, "Show list of purchases"),
-	BALANCE(4, "Balance"), EXIT(0, "Exit");
+	BALANCE(4, "Balance"), SAVE(5, "Save"), LOAD(6, "Load"), EXIT(0, "Exit");
 
 	private int menuPunkt;
 	private String description;
@@ -376,7 +509,7 @@ enum Purchases {
 
 	private int index;
 	private String name;
-	public Map<String, Double> map = new HashMap<>();
+	public Map<String, Double> map = new LinkedHashMap<>();
 	private double balance;
 
 	Purchases(int index, String name) {

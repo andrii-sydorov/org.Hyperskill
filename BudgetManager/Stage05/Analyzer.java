@@ -591,7 +591,7 @@ enum Menu {
 
 }
 
-enum Purchases implements Comparable<Purchases> {
+enum Purchases {
 
 	FOOD(1, "Food"), CLOTHES(2, "Clothes"), ENTERTAINMENT(3, "Entertainment"), OTHER(4, "Other"), BACK(5, "Back");
 

@@ -9,17 +9,25 @@ import java.util.Map.Entry;
 public class SearchOrder {
 	public static void main(String[] args) {
 
-		int[] toSearch = buildArrayToSearchFor(1, 98);
-		int[] searchFor = { 1, 2, 10, 11, 12, 20, 32 };
+		// int[] toSearch = buildArrayToSearchFor(1, 98);
+		int[] toSearch = { 1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 16, 18, 19, 21, 24, 25, 27, 29, 31, 32, 33, 34, 36, 37,
+				38, 39, 40, 41, 44, 45, 46, 47, 48, 49 };
+		int[] searchFor = { 0, 5, 18, 23, 30, 31, 34, 40, 44, 48 };
 
-		Map<Integer, Integer> map = buildMap(toSearch, toSearch);
+		Map<Integer, Integer> map = buildMap(toSearch, searchFor);
 
 		map.forEach((k, v) -> System.out.println(k + " " + v));
-
+		// sort map according number of comparisons
 		List<Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
 		list.sort(Entry.comparingByValue());
 
 		list.forEach(x -> System.out.println(x));
+		// find sum of all comparison operations
+		int sum = 0;
+		for (Map.Entry<Integer, Integer> entr : map.entrySet()) {
+			sum += entr.getValue();
+		}
+		System.out.println(sum);
 	}
 
 	private static int[] buildArrayToSearchFor(int start, int stop) {
@@ -50,7 +58,7 @@ public class SearchOrder {
 			if (curr == last) {
 				return count;
 			}
-			prev = count;
+			prev = curr;
 			curr = Math.min(curr + step, last - 1);
 			count++;
 		}

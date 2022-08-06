@@ -56,7 +56,7 @@ public class JumpAndLinearSearch {
 		int curr = 0;
 		int prev = 0;
 		int count = 1;
-		int last = searchFor.length;
+		int last = searchFor.length - 1;
 		int step = (int) Math.sqrt(searchFor.length);
 
 		while (searchFor[curr] < value) {
@@ -64,7 +64,7 @@ public class JumpAndLinearSearch {
 				return count;
 			}
 			prev = curr;
-			curr = Math.min(curr + step, last - 1);
+			curr = Math.min(curr + step, last);
 			count++;
 		}
 
@@ -74,6 +74,10 @@ public class JumpAndLinearSearch {
 			}
 			count++;
 			curr--;
+		}
+		
+		if (searchFor[curr] == value) {
+			count++;
 		}
 
 		return count;

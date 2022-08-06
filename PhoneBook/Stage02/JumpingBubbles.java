@@ -5,17 +5,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Stage 2/4: Jumping bubbles
- * Description
- * You have to iterate over each element of the number list every time you want
- * to find someone's number. This is the only way to search if your list
- * contains unordered data. Any number can be anywhere on the list, so you have
- * to check every element.
+ * Stage 2/4: Jumping bubbles Description You have to iterate over each element
+ * of the number list every time you want to find someone's number. This is the
+ * only way to search if your list contains unordered data. Any number can be
+ * anywhere on the list, so you have to check every element.
  * 
  * At this stage, you should sort the list of numbers alphabetically by the
  * owner’s name. Sort the list using the bubble sort algorithm and search in the
@@ -33,31 +32,29 @@ import java.util.Scanner;
  * iterations of the linear search), you should stop sorting and use the linear
  * search. Look at the second example to see what you need to output.
  * 
- * Example
- * Output both approaches one after another and see which one is faster. The
- * output example is shown below. Note that you can get totally different
+ * Example Output both approaches one after another and see which one is faster.
+ * The output example is shown below. Note that you can get totally different
  * sorting and searching times!
  * 
  * Example 1:
  * 
- * Start searching (linear search)...
- * Found 500 / 500 entries. Time taken: 1 min. 56 sec. 328 ms.
+ * Start searching (linear search)... Found 500 / 500 entries. Time taken: 1
+ * min. 56 sec. 328 ms.
  * 
- * Start searching (bubble sort + jump search)...
- * Found 500 / 500 entries. Time taken: 9 min. 15 sec. 291 ms.
- * Sorting time: 8 min. 45 sec. 251 ms.
- * Searching time: 0 min. 30 sec. 40 ms.
+ * Start searching (bubble sort + jump search)... Found 500 / 500 entries. Time
+ * taken: 9 min. 15 sec. 291 ms. Sorting time: 8 min. 45 sec. 251 ms. Searching
+ * time: 0 min. 30 sec. 40 ms.
  * 
  * Example 2:
  * 
- * Start searching (linear search)...
- * Found 500 / 500 entries. Time taken: 2 min. 01 sec. 134 ms.
+ * Start searching (linear search)... Found 500 / 500 entries. Time taken: 2
+ * min. 01 sec. 134 ms.
  */
 
 public class JumpingBubbles {
 
-	private static String pathDirectory = "./src/PhoneBook/Stage02/directory.txt";
-	private static String pathFind = "./src/PhoneBook/Stage02/find.txt";
+	private static String pathDirectory = "./src/PhoneBook/Stage02/small_directory.txt";
+	private static String pathFind = "./src/PhoneBook/Stage02/small_find.txt";
 	private static int toFindLinearSearch;
 	private static int isFindLinearSearch;
 	private static int toFindJumpingSearch;
@@ -82,8 +79,22 @@ public class JumpingBubbles {
 		readDataFromDirectory(pathDirectory);
 		readDataFromFind(pathFind);
 
-		linearSearch();
+		// linearSearch();
 		// workingWithCollections();
+		System.out.println();
+		Person[] per = Arrays.copyOfRange(personToFind, 0, personToFind.length);
+		Arrays.sort(per);
+		bubbleSortingAlgorithm(personToFind);
+
+		for (int i = 0; i < personToFind.length; i++) {
+
+			System.out.println(personToFind[i]);
+
+		}
+
+		System.out.println(Arrays.equals(per, personToFind));
+
+		System.exit(0);
 
 		startBubbleSorting = System.currentTimeMillis();
 		bubbleSortingAlgorithm(personToFind);
@@ -220,11 +231,11 @@ public class JumpingBubbles {
 				}
 			}
 			turns++;
-			stopBubbleSorting = System.currentTimeMillis();
-			if (stopBubbleSorting - startBubbleSorting > 10 * totalTimeLinearSearch) {
-				exceededTime = true;
-				break;
-			}
+//			stopBubbleSorting = System.currentTimeMillis();
+//			if (stopBubbleSorting - startBubbleSorting > 10 * totalTimeLinearSearch) {
+//				exceededTime = true;
+//				break;
+//			}
 		}
 	}
 

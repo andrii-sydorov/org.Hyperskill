@@ -57,6 +57,7 @@ public class NumberIteration {
 		}
 
 		if (a[curr] == toSearch) {
+			count++;
 			System.out.printf("Index is %d and number of comparisons is %d", curr, count);
 		}
 		

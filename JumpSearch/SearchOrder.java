@@ -52,14 +52,14 @@ public class SearchOrder {
 		int count = 1;
 		int curr = 0;
 		int prev = 0;
-		int last = toSearch.length;
+		int last = toSearch.length - 1;
 
 		while (toSearch[curr] < value) {
 			if (curr == last) {
 				return count;
 			}
 			prev = curr;
-			curr = Math.min(curr + step, last - 1);
+			curr = Math.min(curr + step, last);
 			count++;
 		}
 
@@ -68,6 +68,10 @@ public class SearchOrder {
 				return count;
 			}
 			curr--;
+			count++;
+		}
+		
+		if (toSearch[curr] == value) {
 			count++;
 		}
 

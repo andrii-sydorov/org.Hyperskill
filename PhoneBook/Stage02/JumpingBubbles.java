@@ -53,8 +53,8 @@ import java.util.Scanner;
 
 public class JumpingBubbles {
 
-	private static String pathDirectory = "./src/PhoneBook/Stage02/small_directory.txt";
-	private static String pathFind = "./src/PhoneBook/Stage02/small_find.txt";
+	private static String pathDirectory = "./src/PhoneBook/Stage02/directory.txt";
+	private static String pathFind = "./src/PhoneBook/Stage02/find.txt";
 	private static int toFindLinearSearch;
 	private static int isFindLinearSearch;
 	private static int toFindJumpingSearch;
@@ -79,22 +79,8 @@ public class JumpingBubbles {
 		readDataFromDirectory(pathDirectory);
 		readDataFromFind(pathFind);
 
-		// linearSearch();
+		 linearSearch();
 		// workingWithCollections();
-		System.out.println();
-		Person[] per = Arrays.copyOfRange(personToFind, 0, personToFind.length);
-		Arrays.sort(per);
-		bubbleSortingAlgorithm(personToFind);
-
-		for (int i = 0; i < personToFind.length; i++) {
-
-			System.out.println(personToFind[i]);
-
-		}
-
-		System.out.println(Arrays.equals(per, personToFind));
-
-		System.exit(0);
 
 		startBubbleSorting = System.currentTimeMillis();
 		bubbleSortingAlgorithm(personToFind);
@@ -231,11 +217,11 @@ public class JumpingBubbles {
 				}
 			}
 			turns++;
-//			stopBubbleSorting = System.currentTimeMillis();
-//			if (stopBubbleSorting - startBubbleSorting > 10 * totalTimeLinearSearch) {
-//				exceededTime = true;
-//				break;
-//			}
+			stopBubbleSorting = System.currentTimeMillis();
+			if (stopBubbleSorting - startBubbleSorting > 10 * totalTimeLinearSearch) {
+				exceededTime = true;
+				break;
+			}
 		}
 	}
 

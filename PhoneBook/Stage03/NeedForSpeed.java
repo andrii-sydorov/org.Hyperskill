@@ -5,15 +5,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class NeedForSpeed {
 
-	private static String pathDirectory = "./src/PhoneBook/Stage03/small_directory.txt";
-	private static String pathFind = "./src/PhoneBook/Stage03/small_find.txt";
+	private static String pathDirectory = "./src/PhoneBook/Stage03/directory.txt";
+	private static String pathFind = "./src/PhoneBook/Stage03/find.txt";
 	private static int toFindLinearSearch;
 	private static int isFindLinearSearch;
 	private static int toFindJumpingSearch;
@@ -26,8 +25,6 @@ public class NeedForSpeed {
 	private static List<Person> lsToFind = new ArrayList<>();
 	private static List<Person> lsToSearch = new ArrayList<>();
 	private static long totalTimeLinearSearch;
-	private static long startJumpSearch;
-	private static long stopJumpSearch;
 	private static long startBubbleSorting;
 	private static long stopBubbleSorting;
 	private static boolean exceededTime;
@@ -40,46 +37,31 @@ public class NeedForSpeed {
 
 		readDataFromDirectory(pathDirectory);
 		readDataFromFind(pathFind);
-		
-		Person[] toCheck = Arrays.copyOfRange(personToFindQuickSort, 0, personToFindQuickSort.length);
-		Person[] toCheck1 = Arrays.copyOfRange(personToFindQuickSort, 0, personToFindQuickSort.length);
-		Person[] toCheck2 = Arrays.copyOfRange(personToFindQuickSort, 0, personToFindQuickSort.length);
-		Person[] toCheck3 = Arrays.copyOfRange(personToFindQuickSort, 0, personToFindQuickSort.length);
-		
-		Arrays.sort(toCheck);
-		quickSortingAlgorithm(toCheck1, 0, toCheck1.length - 1);
-		quickSortMy(toCheck2, 0, toCheck2.length - 1);
-		bubbleSortingAlgorithm(toCheck3);
-		System.out.println(Arrays.equals(toCheck, toCheck1));
-		System.out.println();
-		
-		System.out.println(Arrays.equals(toCheck, toCheck2));
-		System.out.println(Arrays.equals(toCheck, toCheck3));
-		System.out.println(Arrays.equals(toCheck1, toCheck3));
 
-//		linearSearch();
-//
-//		jumpSearchAlgorithm();
-//
-//		quickSort();
+		linearSearch();
 
-		 Collections.sort(lsToFind);
-		
-		 checkingSortingAlgorithm(toCheck3, lsToFind);
+		jumpSearchAlgorithm();
+
+		quickSort();
+
+		// Collections.sort(lsToFind);
+
+		// checkingSortingAlgorithm(toCheck3, lsToFind);
 
 	}
 
 	// ************** quickSearch + binarySearhc*******************************
-	private static boolean searchLogicBinarySearch(Person[] toFind, Person value) {
+	private static boolean searchLogicBinarySearch(Person[] personToFind, Person value) {
 
 		int left = 0;
-		int right = toFind.length - 1;
-		while (left < right) {
+		int right = personToFind.length - 1;
+
+		while (left <= right) {
 			int middle = (left + right) / 2;
-			if (toFind[middle].equals(value)) {
+			if (personToFind[middle].compareTo(value) == 0) {
 				return true;
 			}
-			if (toFind[middle].compareTo(value) < 0) {
+			if (personToFind[middle].compareTo(value) < 0) {
 				left = middle + 1;
 			} else {
 				right = middle - 1;
@@ -90,6 +72,7 @@ public class NeedForSpeed {
 	}
 
 	private static void binarySearch(Person[] personToFind, Person[] personSearchFor) {
+		isFindBinarySearch = 0;
 		for (int i = 0; i < personSearchFor.length; i++) {
 			if (searchLogicBinarySearch(personToFind, personSearchFor[i])) {
 				isFindBinarySearch++;
@@ -115,7 +98,7 @@ public class NeedForSpeed {
 				leftPointer++;
 			}
 
-			while (personToFindQuickSort[leftPointer].compareTo(pivot) > 0 && leftPointer < rightPointer) {
+			while (personToFindQuickSort[rightPointer].compareTo(pivot) > 0 && leftPointer < rightPointer) {
 				rightPointer--;
 			}
 
@@ -132,8 +115,7 @@ public class NeedForSpeed {
 		quickSortingAlgorithm(personToFindQuickSort, leftPointer + 1, highIndex); // search rigth from pivot
 
 	}
-	
-	
+
 	private static void quickSortMy(Person[] arr, int start, int stop) {
 
 		if (start >= stop) {
@@ -143,7 +125,7 @@ public class NeedForSpeed {
 		Person pivot = arr[stop];
 		int lp = start;
 		int rp = stop;
-		
+
 		while (true) {
 			if (pivot.compareTo(arr[lp]) >= 0) {
 				lp++;
@@ -166,15 +148,6 @@ public class NeedForSpeed {
 			}
 		}
 
-//		if (lp == start) {
-//			quickSort(arr, start + 1, stop);
-//		} else if (lp == stop) {
-//			quickSort(arr, start, stop - 1);
-//		} else {
-//			quickSort(arr, start, lp - 1);
-//			quickSort(arr, lp + 1, stop);
-//		}
-
 		quickSortMy(arr, start, lp - 1);
 		quickSortMy(arr, lp + 1, stop);
 	}
@@ -186,6 +159,7 @@ public class NeedForSpeed {
 	}
 
 	private static void quickSort() {
+
 		long startQuickSorting = System.currentTimeMillis();
 		quickSortingAlgorithm(personToFindQuickSort, 0, personToFindQuickSort.length - 1);
 		long stopQuickSorting = System.currentTimeMillis();
@@ -243,14 +217,14 @@ public class NeedForSpeed {
 					timeLinearSearch);
 			System.out.printf("Sorting time: %d min. %d sec. %d ms. %s\n", minuteBubbleSort, secondsBubbleSort,
 					milisecondsBubbleSort, add);
-			System.out.printf("Searching time: %d min. %d sec. %d ms.", minuteLinearSearch, secondsLinearSearch,
+			System.out.printf("Searching time: %d min. %d sec. %d ms.\n", minuteLinearSearch, secondsLinearSearch,
 					milisecondsLinearSearch);
 
 		} else {
 
-			startJumpSearch = System.currentTimeMillis();
+			long startJumpSearch = System.currentTimeMillis();
 			jumpingSearch(personToFindBubbleSort, personSeacrhFor);
-			stopJumpSearch = System.currentTimeMillis();
+			long stopJumpSearch = System.currentTimeMillis();
 			long minuteJumpSort = (stopJumpSearch - startJumpSearch) / 60000;
 			long secondsJumpSort = ((stopJumpSearch - startJumpSearch) % 60000) / 1000;
 			long milisecondsJumpSort = (stopJumpSearch - startJumpSearch) % 1000;
@@ -266,7 +240,7 @@ public class NeedForSpeed {
 					toFindJumpingSearch, minuteGeneral, secondsGeneral, milisecondsGeneral);
 			System.out.printf("Sorting time: %d min. %d sec. %d ms. %s\n", minuteBubbleSort, secondsBubbleSort,
 					milisecondsBubbleSort, add);
-			System.out.printf("Searching time: %d min. %d sec. %d ms.", minuteJumpSort, secondsJumpSort,
+			System.out.printf("Searching time: %d min. %d sec. %d ms.\n", minuteJumpSort, secondsJumpSort,
 					milisecondsJumpSort);
 		}
 	}
@@ -286,6 +260,7 @@ public class NeedForSpeed {
 	}
 
 	private static void jumpingSearch(Person[] personToFind, Person[] personSearchFor) {
+		isFindJumpingSearch = 0;
 		for (int i = 0; i < personSearchFor.length; i++) {
 			if (jumpSearch(personToFind, personSearchFor[i])) {
 				isFindJumpingSearch++;
@@ -316,7 +291,11 @@ public class NeedForSpeed {
 			curr--;
 		}
 
-		return true;
+		if (personToFind[curr].compareTo(value) == 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private static void checkingSortingAlgorithm(Person[] personToFind, List<Person> lsToFind) {

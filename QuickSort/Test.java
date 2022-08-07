@@ -62,15 +62,6 @@ public class Test {
 			}
 		}
 
-//		if (lp == start) {
-//			quickSort(arr, start + 1, stop);
-//		} else if (lp == stop) {
-//			quickSort(arr, start, stop - 1);
-//		} else {
-//			quickSort(arr, start, lp - 1);
-//			quickSort(arr, lp + 1, stop);
-//		}
-
 		quickSort(arr, start, lp - 1);
 		quickSort(arr, lp + 1, stop);
 	}

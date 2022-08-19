@@ -51,7 +51,7 @@ public class MyTest {
 		}
 	}
 
-	private static void quickSort(int[] array, int start, int stop) {
+	public static void quickSort(int[] array, int start, int stop) {
 
 		if (start >= stop) {
 			return;

@@ -31,6 +31,9 @@ public class Probe {
 		};
 		messages.sort(cmp2);
 		messages.forEach(x -> System.out.println(x));
+		System.out.println("Another comparator");
+		messages.sort((x, y) -> x.getContest().length() - y.getContest().length());
+		messages.forEach(x -> System.out.println(x));
 
 	}
 

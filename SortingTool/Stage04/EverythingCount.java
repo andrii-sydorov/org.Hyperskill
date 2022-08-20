@@ -15,7 +15,7 @@ public class EverythingCount {
 	private static String kindOfComparator;
 	private static Map<String, Integer> dataToAnalyze = new HashMap<>();
 	private static Map<String, String> associateMap = new HashMap<>();
-	private static Comparator cmp;
+	private static List<String> dataInput = new ArrayList<>();
 	private static int count = 0;
 
 	public static void main(String[] args) {
@@ -87,15 +87,15 @@ public class EverythingCount {
 		switch (dataType) {
 		case "long":
 			workWithLong(sc);
-			buildStatisticWithLong(dataType);
+			buildStatisticLongAndWord(dataType);
 			break;
 		case "word":
 			workWithWord(sc);
-			buildStatisticWithWord(dataType);
+			buildStatisticLongAndWord(dataType);
 			break;
 		case "line":
 			workWithLine(sc);
-			buildStatisticWithLine(dataType);
+			//buildStatisticWithLine(dataType);
 			break;
 		default:
 			System.out.println("Incorrect command line argumetns");
@@ -107,18 +107,19 @@ public class EverythingCount {
 		while (sc.hasNextLong()) {
 			long l = sc.nextLong();
 			dataToAnalyze.put(String.valueOf(l), dataToAnalyze.getOrDefault(String.valueOf(l), 0) + 1);
+			dataInput.add(String.valueOf(l));
 			count++;
 		}
 	}
 
-	private static void buildStatisticWithLong(String dataType) {
+	private static void buildStatisticLongAndWord(String dataType) {
 		System.out.printf("Total %s: %d.\n", associateMap.get(dataType), count);
 		switch (kindOfComparator) {
 		case "natural":
-			List<String> lsString = new ArrayList<String>(dataToAnalyze.keySet());
-			lsString.sort((x, y) -> Integer.valueOf(x).compareTo(Integer.valueOf(y)));
+			//List<String> lsString = new ArrayList<String>(dataToAnalyze.keySet());
+			dataInput.sort((x, y) -> Integer.valueOf(x).compareTo(Integer.valueOf(y)));
 			System.out.print("Sorted data: ");
-			lsString.forEach(x -> System.out.print(x + " "));
+			dataInput.forEach(x -> System.out.print(x + " "));
 			break;
 		case "byCount":
 			List<Entry<String, Integer>> list = new ArrayList<>(dataToAnalyze.entrySet());
@@ -146,6 +147,7 @@ public class EverythingCount {
 			String[] data = s.split("\\s+");
 			for (int i = 0; i < data.length; i++) {
 				dataToAnalyze.put(data[i], dataToAnalyze.getOrDefault(data[i], 0) + 1);
+				dataInput.add(data[i]);
 				count++;
 			}
 		}
@@ -173,6 +175,7 @@ public class EverythingCount {
 				break;
 			}
 			dataToAnalyze.put(data, dataToAnalyze.getOrDefault(data, 0) + 1);
+			dataInput.add(data);
 			count++;
 
 		}

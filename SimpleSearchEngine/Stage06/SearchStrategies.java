@@ -5,12 +5,92 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+
+/**
+ * Stage 6/6: stage6
+ * Description
+ * Now let's Improve your search engine to make it support complex queries
+ * containing word sequences and use several strategies that determine how to
+ * match data.
+ * 
+ * Objectives
+ * In this stage, your program should be able to use such searching strategies
+ * as ALL, ANY, and NONE.
+ * 
+ * Take, for example, these six sample lines:
+ * 
+ * Dwight Joseph djo@gmail.com
+ * Rene Webb webb@gmail.com
+ * Katie Jacobs
+ * Erick Harrington harrington@gmail.com
+ * Myrtle Medina
+ * Erick Burgess
+ * 
+ * If the strategy is ALL, the program should print lines containing all the
+ * words from the query.
+ * 
+ * Query:
+ * Harrington Erick
+ * 
+ * Result:
+ * Erick Harrington harrington@gmail.com
+ * 
+ * If the strategy is ANY, the program should print the lines containing at
+ * least one word from the query.
+ * 
+ * Query:
+ * Erick Dwight webb@gmail.com
+ * 
+ * Result:
+ * Erick Harrington harrington@gmail.com
+ * Erick Burgess
+ * Dwight Joseph djo@gmail.com
+ * Rene Webb webb@gmail.com
+ * 
+ * If the strategy is NONE, the program should print lines that do not contain
+ * words from the query at all:
+ * 
+ * Query:
+ * djo@gmail.com ERICK
+ * 
+ * Result:
+ * Katie Jacobs
+ * Myrtle Medina
+ * Rene Webb webb@gmail.com
+ * 
+ * All listed operations are implemented in the inverted index. The results
+ * should not contain duplicates.
+ * 
+ * Do not forget to use methods to decompose your program.
+ * 
+ * Example
+ * The lines that start with > represent the user input. Note that these symbols
+ * are not part of the input.
+ * 
+ * === Menu ===
+ * 1. Find a person
+ * 2. Print all persons
+ * 0. Exit
+ * > 1
+ * 
+ * Select a matching strategy: ALL, ANY, NONE
+ * > ANY
+ * 
+ * Enter a name or email to search all suitable people.
+ * > Katie Erick QQQ
+ * 
+ * 3 persons found:
+ * Katie Jacobs
+ * Erick Harrington harrington@gmail.com
+ * Erick Burgess
+ * 
+ * @author SMD_ASY
+ *
+ */
 
 public class SearchStrategies {
 
@@ -18,7 +98,6 @@ public class SearchStrategies {
     public static Map<String, List<Integer>> mapWithData = new HashMap<>();
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         Scanner sc = new Scanner(System.in);
         Map<String, String> map = new HashMap<>();
         for (int i = 0; i < args.length; i += 2) {
@@ -89,7 +168,7 @@ public class SearchStrategies {
         }
         System.out.println();
         System.out.println("Enter a name or email to search all suitable people.");
-        String name = sc.nextLine();
+        String name = sc.nextLine().toLowerCase();
         System.out.println();
         Map<String, List<Integer>> copyOfMap = new HashMap<>();
         copyOfMap.putAll(mapWithData);
@@ -111,7 +190,7 @@ public class SearchStrategies {
             while (innerScanner.hasNext()) {
                 String s = innerScanner.nextLine();
                 data.add(s);
-                String[] arrayOfData = s.split("\\s+");
+                String[] arrayOfData = s.toLowerCase().split("\\s+");
                 index++;
                 for (int i = 0; i < arrayOfData.length; i++) {
                     if (mapWithData.keySet().contains(arrayOfData[i])) {
@@ -177,16 +256,22 @@ class All implements SearchStrategy {
     @Override
     public List<String> searchResults(String toFind, List<String> listWhereFind,
             Map<String, List<Integer>> copyOfMap) {
-        // TODO Auto-generated method stub
         String[] toSearch = toFind.split("\\s+");
         List<Integer> listOfIndexes = new ArrayList<>();
         boolean firstTurns = true;
         for (String s : toSearch) {
+            if (copyOfMap.get(s) == null) {
+                continue;
+            }
             if (firstTurns) {
                 listOfIndexes = copyOfMap.get(s);
+                firstTurns = false;
             } else {
                 listOfIndexes.retainAll(copyOfMap.get(s));
             }
+        }
+        if (listOfIndexes.isEmpty()) {
+            return null;
         }
         List<String> result = new ArrayList<>();
         for (Integer i : listOfIndexes) {
@@ -201,11 +286,16 @@ class Any implements SearchStrategy {
 
     @Override
     public List<String> searchResults(String toFind, List<String> listWhereFind, Map<String, List<Integer>> copyOfMap) {
-        // TODO Auto-generated method stub
         String[] toSearch = toFind.split("\\s+");
         Set<Integer> setOfIndexes = new HashSet<>();
         for (String s : toSearch) {
-            setOfIndexes.addAll(copyOfMap.get(s));
+            List<Integer> toAdd = copyOfMap.get(s);
+            if (toAdd != null) {
+                setOfIndexes.addAll(toAdd);
+            }
+        }
+        if (setOfIndexes.isEmpty()) {
+            return null;
         }
         List<String> result = new ArrayList<>();
         for (Integer i : setOfIndexes) {
@@ -220,18 +310,18 @@ class None implements SearchStrategy {
 
     @Override
     public List<String> searchResults(String toFind, List<String> listWhereFind, Map<String, List<Integer>> copyOfMap) {
-        // TODO Auto-generated method stub
         String[] toSearch = toFind.split("\\s+");
         Set<Integer> setOfIndexes = new HashSet<>();
         List<String> result = new ArrayList<>();
         for (String s : toSearch) {
-            String key = s;
             List<Integer> ls = copyOfMap.get(s);
-            Iterator<Entry<String, List<Integer>>> iterator = copyOfMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, List<Integer>> entry = iterator.next();
-                if (entry.getKey().equals(key) || entry.getValue().equals(ls)) {
-                    iterator.remove();
+            if (ls == null) {
+                continue;
+            }
+            int[] ar = copyOfMap.get(s).stream().mapToInt(i -> i).toArray();
+            for (Integer i : ar) {
+                for (Map.Entry<String, List<Integer>> entr : copyOfMap.entrySet()) {
+                    entr.getValue().remove(i);
                 }
             }
         }

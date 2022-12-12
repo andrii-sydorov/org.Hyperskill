@@ -1,4 +1,4 @@
-package CustomThread;
+package MultiThread.CustomThread;
 
 import java.util.Scanner;
 

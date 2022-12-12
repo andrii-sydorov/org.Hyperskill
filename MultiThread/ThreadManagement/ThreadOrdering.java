@@ -1,4 +1,4 @@
-package ThreadManagement;
+package MultiThread.ThreadManagement;
 
 /**
  * Ordering the execution of threads

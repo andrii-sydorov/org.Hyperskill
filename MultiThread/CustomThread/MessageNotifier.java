@@ -1,4 +1,4 @@
-package CustomThread;
+package MultiThread.CustomThread;
 
 /**
  * Message notifier as a thread

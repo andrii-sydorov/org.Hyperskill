@@ -1,4 +1,4 @@
-package ThreadManagement;
+package MultiThread.ThreadManagement;
 
 import java.util.Scanner;
 

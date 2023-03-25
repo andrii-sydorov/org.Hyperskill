@@ -4,7 +4,7 @@ public class ShareData {
 
     public static void main(String[] args) throws InterruptedException {
         // TODO Auto-generated method stub
-        // exptexted behaviour one thread, then another
+        // expected behavior one thread, then another
         Counter counter = new Counter();
         Thread t1 = new MyThread(counter);
         Thread t2 = new MyThread(counter);

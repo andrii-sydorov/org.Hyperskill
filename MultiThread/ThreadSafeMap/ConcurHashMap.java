@@ -1,5 +1,7 @@
 package MultiThread.ThreadSafeMap;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,6 +26,15 @@ public class ConcurHashMap {
         writer1.join(); // wait for writer1 thread
         writer2.join(); // wait for writer2 thread
         System.out.println(map.size()); // allways is 20000
+        
+        Map<Integer, String> newMap = Collections.synchronizedMap(new HashMap<>());
+        Thread t3 = new Thread(() -> addPositiveNumbers(newMap));
+        Thread t4 = new Thread(() -> addNegativeNumbers(newMap));
+        t3.start();
+        t4.start();
+        t3.join();
+        t4.join();
+        System.out.println(newMap.size());
 
     }
 

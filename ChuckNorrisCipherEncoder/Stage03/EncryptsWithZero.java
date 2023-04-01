@@ -98,6 +98,9 @@ public class EncryptsWithZero {
         System.out.println();
         System.out.println("The result:");
         System.out.println(res);
+        System.out.println("The news solution not mine, but to optimal!");
+        System.out.println(convert(encoded.toString()));
+        System.out.println("The solution is the same = " + convert(encoded.toString()).equals(res));
     }
 
     public static String makeBinary(int toConvert) {
@@ -160,6 +163,28 @@ public class EncryptsWithZero {
             sb.append("0");
         }
         return sb.toString();
+    }
+    
+    public static String convert(String s) {
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        while (index  < s.length()) {
+            char temp = s.charAt(index);
+            switch (temp) {
+                case '0':
+                    sb.append("00 ");
+                    break;
+                case '1':
+                    sb.append("0 ");
+                    break;
+            }
+            while (index < s.length() && temp == s.charAt(index)) {
+                sb.append("0");
+                index++;
+            }
+            sb.append(" ");
+        }
+        return sb.toString().trim();
     }
 
 }

@@ -80,6 +80,23 @@ public class DecodeStrings {
         System.out.println("\nThe result:");
         sc.close();
         System.out.println(ChuckNorrisCipherEncoder.getOutputMessage());
+        
+       // parts of the solution from hyperskill.org with regex 
+        String[] binaryWords = unaryToBinary(words).split("(?<=\\G.{7})");
+        for (String binaryWord : binaryWords) {
+            System.out.print((char) Integer.parseInt(binaryWord, 2));
+        }
+    }
+    
+    private static String unaryToBinary(String unarySequence) {
+        String[] unarySequenceParts = unarySequence.split(" ");
+        String binarySequence = "";
+
+        for (int i = 0; i < unarySequenceParts.length; i += 2) {
+            binarySequence += (unarySequenceParts[i].equals("00") ? "0" : "1").repeat(unarySequenceParts[i + 1].length());
+        }
+
+        return binarySequence;
     }
 
     static class ChuckNorrisCipherEncoder {

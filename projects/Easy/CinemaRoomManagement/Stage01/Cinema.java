@@ -1,4 +1,4 @@
-package CinemaRoomManagement.Stage01;
+package projects.Easy.CinemaRoomManagement.Stage01;
 
 import java.util.Arrays;
 
@@ -43,8 +43,8 @@ import java.util.Arrays;
 
 public class Cinema {
 
-	private final int rowNumbers = 15;
-	private final int columnNumbers = 23;
+	private final int rowNumbers = 7;
+	private final int columnNumbers = 8;
 	private final String[][] field = new String[rowNumbers + 1][columnNumbers * 2 + 1];
 
 	public static void main(String[] args) {

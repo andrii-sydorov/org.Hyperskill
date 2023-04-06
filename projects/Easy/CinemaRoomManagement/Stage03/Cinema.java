@@ -1,4 +1,4 @@
-package CinemaRoomManagement.Stage03;
+package projects.Easy.CinemaRoomManagement.Stage03;
 
 import java.util.Scanner;
 
@@ -146,7 +146,6 @@ public class Cinema {
 	}
 
 	private void print() {
-		System.out.println();
 		printName();
 		printField();
 		System.out.println();
@@ -166,17 +165,17 @@ public class Cinema {
 	}
 
 	private void dataInput() {
-		System.out.println("Enter the number of rows:");
+		System.out.print("Enter the number of rows: ");
 		rowNumbers = sc.nextInt();
-		System.out.println("Enter the number of seats in each row:");
+		System.out.print("Enter the number of seats in each row: ");
 		columnNumbers = sc.nextInt();
 		System.out.println();
 	}
 
 	private void placeInput() {
-		System.out.println("Enter a row number:");
+		System.out.print("Enter a row number: ");
 		rowPlace = sc.nextInt();
-		System.out.println("Enter a seat number in that row:");
+		System.out.print("Enter a seat number in that row: ");
 		columnPlace = sc.nextInt();
 		System.out.println();
 	}
@@ -189,6 +188,7 @@ public class Cinema {
 			price = 8;
 		}
 		System.out.println("Ticket price: $" + price);
+		System.out.println();
 	}
 
 	private void makeBusy() {

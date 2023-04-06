@@ -1,4 +1,4 @@
-package CinemaRoomManagement.Stage04;
+package projects.Easy.CinemaRoomManagement.Stage04;
 
 import java.util.Scanner;
 

@@ -1,0 +1,15 @@
+
+#Work on project. Stage 6/8: Stage and commit
+
+#Description
+#You have modified one of your files in the last stage. Now, commit the changes with a nice commit message.
+#
+#Objectives
+#Let's break this task into several steps:
+#
+#Add the modified file to the staging area;
+#Commit your changes with the commit message: New function multiplication
+
+# Write your solution below
+git add .
+git commit -m "New function multiplication"

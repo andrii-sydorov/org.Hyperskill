@@ -1,0 +1,14 @@
+#Work on project. Stage 2/8: List the content
+
+#Description
+#In the previous stage, you cloned the project repository from a remote repo to the local directory dolly. Now, change the directory to it and list the content.
+#
+#Objectives
+#Let's break this task into several steps:
+#
+#Change the directory to dolly;
+#
+#List the files and directories inside dolly.
+
+cd ./dolly
+ls -l

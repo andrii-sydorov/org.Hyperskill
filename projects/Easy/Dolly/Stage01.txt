@@ -1,0 +1,12 @@
+#Work on project. Stage 1/8: Clone
+
+#Description
+#You have joined a new project. The project files are located in a remote repository. Your task is to clone this repository into your current working directory. The URL of the remote repository is file:///tmp/dolly.
+#
+#While working on this project, you will use a few Bash commands in addition to Git commands.
+#Objective
+#Use the suitable Git command to clone the repository.
+
+
+# Write your solution below
+git clone file:///tmp/dolly

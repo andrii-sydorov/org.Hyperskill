@@ -1,0 +1,15 @@
+
+#Work on project. Stage 4/8: Let's see what's inside
+
+#Description
+#Your project branches can be seen in the code snippet. Right now, you work on the dev-mul branch, marked with an asterisk.
+#
+#* dev-mul
+#main
+#As you remember, there are two files in your project. You will modify one of them in the next stage. But first, study the content. As you might guess, the file name is main.py.
+#
+#Objective
+#Use the cat command to view the content of the file mentioned in the Description stage;
+
+# Write your solution below
+cat main.py

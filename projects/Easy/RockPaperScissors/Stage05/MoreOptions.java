@@ -2,10 +2,15 @@ package projects.Easy.RockPaperScissors.Stage05;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * Stage 5/5: More options
@@ -96,29 +101,31 @@ import java.util.Scanner;
  * Your program should:
  * 
  * - Output a line Enter your name: . Users enter their names on the same line
- *   (not the one following the output);
+ * (not the one following the output);
  * - Read the input with the username and output Hello, <name>;
  * - Read rating.txt and check whether it contains an entry with the current
- *   username. If yes, use the score specified in the file as a starting point. If
- *   not, start the score from 0;
+ * username. If yes, use the score specified in the file as a starting point. If
+ * not, start the score from 0;
  * - Read the input with the list of options for the game (options are separated
- *   by comma). If the input is an empty line, play with the default options;
+ * by comma). If the input is an empty line, play with the default options;
  * - Output a line Okay, let's start;
- * - Play the game by the rules defined in the previous stages and read the user's
- *   input;
+ * - Play the game by the rules defined in the previous stages and read the
+ * user's
+ * input;
  * - If the input is !exit, output Bye! and stop the game;
- * - If the input is the name of the option, then pick a random option and output
- *   a line with the result of the game in the following format (<option> is the
- *   name of the option chosen by the program):
- *    - Loss: Sorry, but the computer chose <option>
- *    - Draw: There is a draw (<option>)
- *    - Win: Well done. The computer chose <option> and failed
+ * - If the input is the name of the option, then pick a random option and
+ * output
+ * a line with the result of the game in the following format (<option> is the
+ * name of the option chosen by the program):
+ * - Loss: Sorry, but the computer chose <option>
+ * - Draw: There is a draw (<option>)
+ * - Win: Well done. The computer chose <option> and failed
  * - For each draw, add 50 points to the score. For each user's win, add 100 to
- *   their score. In case of a loss, don't change the score;
+ * their score. In case of a loss, don't change the score;
  * - If input corresponds to anything else, output Invalid input;
  * - Restart the game (with the same options defined before the start of the
- *   game).
- *   
+ * game).
+ * 
  * Examples
  * 
  * The greater-than symbol followed by a space (> ) represents the user input.
@@ -274,4 +281,43 @@ class Player {
         this.name = name;
     }
 
+}
+
+/**
+ * The best solution from hyperskill
+ * @author SMD_ASY
+ *
+ */
+class Solution {
+
+    public static void solution() throws IOException {
+        var sc = new Scanner(System.in);
+        var scores = Files.readAllLines(Path.of("rating.txt")).stream()
+                .map(s -> s.split(" "))
+                .collect(Collectors.toMap(s -> s[0], s -> Integer.parseInt(s[1])));
+        System.out.print("Enter your name: ");
+        var name = sc.nextLine();
+        scores.putIfAbsent(name, 0);
+        System.out.println("Hello, " + name);
+        var opt = sc.nextLine();
+        var options = opt.isBlank() ? List.of("rock", "paper", "scissors") : Arrays.stream(opt.split(",")).toList();
+        System.out.println("Okay, let's start");
+        while (true) {
+            var input = sc.nextLine();
+            var computer = new Random().nextInt(options.size());
+            var player = options.indexOf(input);
+            var win = player < options.size() / 2 ? player > computer || options.size() / 2 + player < computer
+                    : player > computer && player - options.size() / 2 <= computer;
+            System.out.printf("!exit".equals(input) ? "Bye!"
+                    : "!rating".equals(input) ? "Your rating: " + scores.get(name) + "\n"
+                            : player == -1 ? "Invalid input\n"
+                                    : player == computer ? "There is a draw (%s)\n"
+                                            : win ? "Well done. The computer chose %s and failed\n"
+                                                    : "Sorry, but the computer chose %s\n",
+                    options.get(computer));
+            scores.put(name, scores.get(name) + (player == computer ? 50 : win ? 100 : 0));
+            if ("!exit".equals(input))
+                return;
+        }
+    }
 }

@@ -1,0 +1,24 @@
+
+#Work on project. Stage 5/8: A new function
+
+#Description
+#The current content of the main.py can be seen in the code snippet. Follow the instructions to modify the file's content.
+#
+#def add(num1, num2):
+#    return num1 + num2
+#Now, add another function to main.py. There are two lines of code in the code snippet below. Add them to the file.
+#
+#def mul(num1, num2):
+#    return num1 * num2
+#Objectives
+#Let's break this task into several steps:
+#
+#Add the lines to the file using echo command;
+#View the content of the file;
+#Use the Git status command to display the current state of your working directory.
+
+# Write your solution below
+echo -e "\ndef mul(num1, num2):" >> main.py
+echo -e "\n    return num1 * num2" >> main.py
+cat main.py
+git status

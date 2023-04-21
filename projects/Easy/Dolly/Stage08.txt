@@ -1,0 +1,15 @@
+#Work on project. Stage 8/8: Push
+
+#Description
+#There's one step left. To share the changes with your team, you need to push them to the remote branch. But before doing it, take a look at the changes you've made.
+#
+#Objectives
+#Let's break this task into several steps:
+#
+#With the help of the Git diff command, view the changes between the previous and the last commit.
+# - Push the changes to the remote;
+# - Use the git diff HEAD~ command to view the changes between the previous and last commit
+
+# Write your solution below
+git diff HEAD~
+git push

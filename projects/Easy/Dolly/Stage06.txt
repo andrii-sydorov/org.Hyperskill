@@ -7,8 +7,8 @@
 #Objectives
 #Let's break this task into several steps:
 #
-#Add the modified file to the staging area;
-#Commit your changes with the commit message: New function multiplication
+# - Add the modified file to the staging area;
+# - Commit your changes with the commit message: New function multiplication
 
 # Write your solution below
 git add .

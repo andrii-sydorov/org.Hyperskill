@@ -1,0 +1,17 @@
+
+#Work on project. Stage 7/8: Merge
+
+#Description
+#You're done with the dev-mul branch. Now, merge the changes to the main branch.
+#
+#Objectives
+#Let's break this task into several steps:
+#
+# - Check out the main branch;
+# - Merge the changes from the dev-mul branch;
+# - Delete the dev-mul branch.
+
+# Write your solution below
+git checkout main
+git merge dev-mul
+git branch -d dev-mul

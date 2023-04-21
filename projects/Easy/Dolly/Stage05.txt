@@ -13,9 +13,9 @@
 #Objectives
 #Let's break this task into several steps:
 #
-#Add the lines to the file using echo command;
-#View the content of the file;
-#Use the Git status command to display the current state of your working directory.
+# - Add the lines to the file using echo command;
+# - View the content of the file;
+# - Use the Git status command to display the current state of your working directory.
 
 # Write your solution below
 echo -e "\ndef mul(num1, num2):" >> main.py

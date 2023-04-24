@@ -1,0 +1,12 @@
+#Work on project. Stage 7/7: Remotes
+
+#Description
+#In this project, you have created only one remote branch. In a production environment, there could be more than one branch. 
+#But there are ways to list them easily. Now, your task is to list your remotes. To accomplish that, use the remote command with the --verbose option.
+#
+#Objectives
+#List your remotes.
+
+# Write your solution below
+# You should write the commands line by line
+git remote --verbose

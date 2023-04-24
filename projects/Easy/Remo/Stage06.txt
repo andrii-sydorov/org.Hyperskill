@@ -1,0 +1,15 @@
+#Work on project. Stage 6/7: Push
+
+#Description
+#In the second stage of the project, you've defined a remote. Now, you can push your changes to it. 
+#While pushing your changes, don't forget the -u or the --set-upstream option in your first attempt. 
+#Now, any future push/pull attempt will target the upstream branch automatically.
+#
+#If you do not set the upstream, with any push/pull attempt you need to define the name of the remote, and the name of the branch explicitly.
+#
+#Objectives
+# - Push your changes to the remote
+
+# Write your solution below
+# You should write the commands line by line
+git push --set-upstream origin main

@@ -1,7 +1,10 @@
 #Work on project. Stage 1/7: Global settings
 
 #Description
-#When you install the Git utility on your system, the first thing you need to do is to define the global variables. They can be defined with a git config command followed by --global option, a variable name, and a value. This means every git repository created on your system after that will have these variables pre-defined. Below you will find a simple usage of the command. To learn more about it, you can follow the link git configuration for official documentation.
+#When you install the Git utility on your system, the first thing you need to do is to define the global variables. 
+#They can be defined with a git config command followed by --global option, a variable name, and a value. 
+#This means every git repository created on your system after that will have these variables pre-defined. 
+#Below you will find a simple usage of the command. To learn more about it, you can follow the link git configuration for official documentation.
 #
 #git config --global <variable name> <value>
 #The config command without a value will show you the value of the variable.

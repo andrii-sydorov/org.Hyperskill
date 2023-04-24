@@ -1,0 +1,15 @@
+#Work on project. Stage 4/7: Ignore it
+
+#Description
+#It is important not to commit/push uncalled-for files or files that contain secrets inside them. Particularly when you work with public repositories. 
+#Hopefully, there is a way to avoid it. With the code snippet below, add an .env file to .gitignore. 
+#The Git utility will ignore the files which are included in the .gitignore. It is possible to add directories to .gitignore, too. 
+#But it is not your task in this project:
+#
+# echo ".env" > .gitignore
+#Objectives
+# - Add an .env file to .gitignore;
+
+# Write your solution below
+# You should write the commands line by line
+echo ".env" > .gitignore

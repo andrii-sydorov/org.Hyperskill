@@ -1,0 +1,13 @@
+#Work on project. Stage 5/7: Commit
+
+#Description
+#In this stage, make your first commit. First, add the files to the staging area and commit them afterward. Your commit message should be Initial commit.
+#
+#Objectives
+# - Stage your files;
+# - Commit the changes with a message.
+
+# Write your solution below
+# You should write the commands line by line
+git add .
+git commit -m "Initial commit

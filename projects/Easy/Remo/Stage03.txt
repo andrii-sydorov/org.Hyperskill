@@ -1,12 +1,16 @@
 #Description
 #An empty repository doesn't make much sense. Let's add some files to work with.
 #
-#The examples below show how to use the echo command. It is a Bash command to display a line of text. In this stage, use this command to redirect a text to a file.
+#The examples below show how to use the echo command. It is a Bash command to display a line of text. 
+#In this stage, use this command to redirect a text to a file.
 #
-#With the help of the code snippet below, you can create the first file. It will create a Python file with the name main.py. If you run this file in an environment where Python is installed, it will print Hello world to the standard output. But this is just a bit of information, you will not run this file:
+#With the help of the code snippet below, you can create the first file. It will create a Python file with the name main.py. 
+#If you run this file in an environment where Python is installed, it will print Hello world to the standard output. 
+#But this is just a bit of information, you will not run this file:
 #
 # echo "print('Hello world')" > main.py
-#To create the second file, use the code snippet below. The command will create an .env file with a secret in it. Use the .env file to store environmental variables, URLs, API keys, and secrets:
+#To create the second file, use the code snippet below. The command will create an .env file with a secret in it. 
+#Use the .env file to store environmental variables, URLs, API keys, and secrets:
 #
 # echo "PASSWORD=Ax?bu75+33" > .env
 #Objectives

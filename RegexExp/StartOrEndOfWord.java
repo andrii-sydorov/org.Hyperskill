@@ -53,6 +53,7 @@ public class StartOrEndOfWord {
         String line = scanner.nextLine();
         Pattern p1 = Pattern.compile("\\b" + part, Pattern.CASE_INSENSITIVE);
         Pattern p2 = Pattern.compile(part + "\\b", Pattern.CASE_INSENSITIVE);
+        //Pattern pattern = Pattern.compile("\\b" + part + "|" + part + "\\b");
         Matcher m1 = p1.matcher(line);
         Matcher m2 = p2.matcher(line);
         System.out.println(m1.find() || m2.find() ? "YES" : "NO");

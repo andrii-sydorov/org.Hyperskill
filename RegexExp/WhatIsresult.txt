@@ -1,0 +1,10 @@
+What is the result
+Given a regular expression, a string and an operation:
+
+  String regex = "\\dabc";
+  String str = "aab3bc4abcabc2abc";
+  String result = str.replaceAll(regex, "");
+
+Find the resulting string.
+
+"aab3bcabc"

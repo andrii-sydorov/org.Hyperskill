@@ -77,10 +77,17 @@ public class MultipleOperations {
                 postfix.add(data);
             } catch (NumberFormatException nfe) {
                 while(true) {
-                    if (operations.isEmpty()) {
+                    if (operations.isEmpty() || operations.peek().equals("(") || data.equals("(")) {
                         operations.push(data);
                         break;
-                    }      
+                    }
+                    if (data.equals(")")) {
+                        while(!operations.peek().equals("(")) {
+                            postfix.add(operations.pop());
+                        }
+                        operations.pop();
+                        break;
+                    }
                     if (map.get(data) <= map.get(operations.peek())) {
                         postfix.add(operations.pop());
                     } else {
@@ -109,17 +116,19 @@ public class MultipleOperations {
                 int first = digits.pollLast();
                 switch(s) {
                     case "+":
-                        digits.push(first + second);
+                        digits.add(first + second);
                         break;
                     case "-":
-                        digits.push(first - second);
+                        digits.add(first - second);
                         break;
                     case "*":
-                        digits.push(first * second);
+                        digits.add(first * second);
                         break;
                     case "/":
-                        digits.push(first / second);
+                        digits.add(first / second);
                         break;
+                    case "^":
+                        digits.push((int)Math.pow(first, second));
                 }
             }
         }

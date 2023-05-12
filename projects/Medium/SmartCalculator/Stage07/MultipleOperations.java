@@ -22,14 +22,16 @@ public class MultipleOperations {
         map.put("*", 2);
         map.put("/", 2);
         map.put("^", 3);
-        
-        brackets.put(')','(');
+
+        brackets.put(')', '(');
         brackets.put('}', '{');
         brackets.put(']', '[');
     }
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+        System.out.println(multipleSigns("--9".replaceAll("\\s+", "").split("")));
+        System.exit(0);
         Scanner sc = new Scanner(System.in);
         String data = sc.nextLine();
         sc.close();
@@ -38,13 +40,45 @@ public class MultipleOperations {
             return;
         }
         List<String> ls = Arrays.stream(data.split("\\s+")).collect(Collectors.toList());
-        //ls.forEach(x -> System.out.println(x));
+        // ls.forEach(x -> System.out.println(x));
         Deque<String> postfix = makePostfix(ls);
         System.out.println(postfix);
         int result = calculate(postfix);
         System.out.println(result);
     }
-    
+
+    public static String multipleSigns(String[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            if (sb.isEmpty()) {
+                sb.append(arr[i]);
+                continue;
+            }
+            if (arr[i].equals("-")) {
+                String s = Character.toString(sb.charAt(sb.length() - 1));
+                if (s.equals("-")) {
+                    sb.setCharAt(sb.length() - 1, '+');
+                } else if (s.equals("+")) {
+                    sb.setCharAt(sb.length() - 1, '-');
+                } else {
+                    sb.append(arr[i]);
+                }
+            } else if (arr[i].equals("+")) {
+                String s = Character.toString(sb.charAt(sb.length() - 1));
+                if (s.equals("-")) {
+                    sb.setCharAt(sb.length() - 1, '-');
+                } else if (s.equals("+")) {
+                    continue;
+                } else {
+                    sb.append(arr[i]);
+                }
+            } else {
+                sb.append(arr[i]);
+            }
+        }
+        return sb.toString();
+    }
+
     public static boolean checkBrackets(String s) {
         Stack<Character> br = new Stack<>();
         for (int i = 0; i < s.length(); i++) {
@@ -62,7 +96,7 @@ public class MultipleOperations {
                     return false;
                 }
             }
-            
+
         }
         return br.isEmpty();
     }
@@ -76,13 +110,13 @@ public class MultipleOperations {
                 Integer.valueOf(data);
                 postfix.add(data);
             } catch (NumberFormatException nfe) {
-                while(true) {
+                while (true) {
                     if (operations.isEmpty() || operations.peek().equals("(") || data.equals("(")) {
                         operations.push(data);
                         break;
                     }
                     if (data.equals(")")) {
-                        while(!operations.peek().equals("(")) {
+                        while (!operations.peek().equals("(")) {
                             postfix.add(operations.pop());
                         }
                         operations.pop();
@@ -103,18 +137,18 @@ public class MultipleOperations {
         }
         return postfix;
     }
-    
+
     public static int calculate(Deque<String> postfix) {
         Deque<Integer> digits = new ArrayDeque<>();
-        while(!postfix.isEmpty()) {
+        while (!postfix.isEmpty()) {
             String s = postfix.pollFirst();
             try {
                 int i = Integer.valueOf(s);
                 digits.add(i);
             } catch (NumberFormatException nfe) {
-                int second  = digits.pollLast();
+                int second = digits.pollLast();
                 int first = digits.pollLast();
-                switch(s) {
+                switch (s) {
                     case "+":
                         digits.add(first + second);
                         break;
@@ -128,7 +162,7 @@ public class MultipleOperations {
                         digits.add(first / second);
                         break;
                     case "^":
-                        digits.push((int)Math.pow(first, second));
+                        digits.push((int) Math.pow(first, second));
                 }
             }
         }

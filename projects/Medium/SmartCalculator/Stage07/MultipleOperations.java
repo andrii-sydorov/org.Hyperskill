@@ -36,13 +36,13 @@ public class MultipleOperations {
         // System.exit(0);
         Scanner sc = new Scanner(System.in);
         boolean isRunning = true;
-        while (!isRunning) {
+        while (isRunning) {
             String data = sc.nextLine();
             if (data.isEmpty()) {
                 continue;
             }
             // checking the menu
-            Pattern p = Pattern.compile("/.+");
+            Pattern p = Pattern.compile("/.*");
             Matcher m = p.matcher(data);
             if (m.matches()) {
                 switch (data) {
@@ -59,10 +59,12 @@ public class MultipleOperations {
                 continue;
             }
             // shouldn't ends with signs for digits and literals
-            p = Pattern.compile(".+[a-zA-Z0-9]+[+-*/^]+");
+            // .*[a-zA-Z0-9]+
+            p = Pattern.compile(".*[^a-zA-Z0-9]+");
             m = p.matcher(data);
             if (m.matches()) {
                 System.out.println("Invalid expression");
+                System.out.println("Shouldn't end with mathoperations");
                 continue;
             }
             // shouldn't have multiple multiplication or divide signs
@@ -70,18 +72,13 @@ public class MultipleOperations {
             m = p.matcher(data);
             if (m.find()) {
                 System.out.println("Invalid expression");
+                System.out.println("Shouldn't have multiple multiplication and divide operations");
                 continue;
             }
             // should have the correct sequence of brackets
             if (!checkBrackets(data)) {
                 System.out.println("Invalid expression");
-                continue;
-            }
-            // digits shouldn't follow after literal in left parts of equations
-            p = Pattern.compile(".+\\w+\\d+.*=?|");
-            m = p.matcher(data);
-            if (m.find()) {
-                System.out.println("Invalid identifier");
+                System.out.println("Invalid number of brackets");
                 continue;
             }
             // right part of equation also shouldn't have digits after literals
@@ -89,6 +86,13 @@ public class MultipleOperations {
             m = p.matcher(data);
             if (m.find()) {
                 System.out.println("Invalid assignment");
+                continue;
+            }
+            // digits shouldn't follow after literal in left parts of equations
+            p = Pattern.compile(".*\\w+\\d+.*=?");
+            m = p.matcher(data);
+            if (m.find()) {
+                System.out.println("Invalid identifier");
                 continue;
             }
             // digits shouldn't be in left and right part of equation
@@ -99,17 +103,79 @@ public class MultipleOperations {
                 continue;
             }
             // TODO work with variables and equation signs
-            
+            // remove duplicate operations
+            String ss = multipleSigns(data.replaceAll("\\s+", "").split(""));
+            p = Pattern.compile("\\s*[a-zA-Z]+\\s*=.*");
+            m = p.matcher(ss);
+            if (m.find()) {
+                String[] ar = ss.split("=");
+                String key = ar[0];
+                // working with right part ar[1]
+                String value = readyForCalculate(ar[1]);
+                if (value == null) {
+                    System.out.println("Unknown variable");
+                } else {
+                    variable.put(key, value);
+                }
+                continue;
+            }
+            // calculation
+            System.out.println(readyForCalculate(ss));
+            continue;
         }
 
         sc.close();
-        
-        List<String> ls = Arrays.stream(data.split("\\s+")).collect(Collectors.toList());
-        // ls.forEach(x -> System.out.println(x));
-        Deque<String> postfix = makePostfix(ls);
-        System.out.println(postfix);
-        int result = calculate(postfix);
-        System.out.println(result);
+
+        System.out.println("Bye!");
+    }
+
+    public static String readyForCalculate(String ar) {
+        String[] digitsLiterals = ar.split("[^A-Za-z0-9]+");
+        String[] operations = ar.split("\\w+");
+        String[] digits = new String[digitsLiterals.length];
+        for (int i = 0; i < digits.length; i++) {
+            try {
+                Integer.valueOf(digitsLiterals[i]);
+                digits[i] = digitsLiterals[i];
+            } catch (NumberFormatException nfe) {
+                if (variable.get(digitsLiterals[i]) == null) {
+                    return null;
+                } else {
+                    digits[i] = variable.get(digitsLiterals[i]);
+                }
+            }
+        }
+        // for postfix operations
+        String[] result = makeResult(digits, operations);
+        Deque<String> postfix = makePostfix(result);
+        String value = String.valueOf(calculate(postfix));
+        return value;
+    }
+
+    public static String[] makeResult(String[] digits, String[] operations) {
+        int firstIndex = 0;
+        int secondIndex = 0;
+        String[] result = new String[operations.length + digits.length];
+        for (int i = 0; i < result.length; i++) {
+            if (digits.length > operations.length) {
+                if (i % 2 == 0) {
+                    result[i] = digits[firstIndex];
+                    firstIndex++;
+                } else {
+                    result[i] = operations[secondIndex];
+                    secondIndex++;
+                }
+            } else {
+                if (i % 2 == 0) {
+                    result[i] = operations[secondIndex];
+                    secondIndex++;
+                } else {
+                    result[i] = digits[firstIndex];
+                    firstIndex++;
+                }
+            }
+        }
+        return result;
     }
 
     public static String multipleSigns(String[] arr) {
@@ -166,11 +232,16 @@ public class MultipleOperations {
         return br.isEmpty();
     }
 
-    public static Deque<String> makePostfix(List<String> ls) {
+    public static Deque<String> makePostfix(String[] arr) {
+        Pattern p = Pattern.compile("[+-]");
+        Matcher m = p.matcher(arr[0]);
         Deque<String> postfix = new ArrayDeque<String>();
         Stack<String> operations = new Stack<String>();
-        for (int i = 0; i < ls.size(); i++) {
-            String data = ls.get(i);
+        if (m.matches()) {
+            postfix.add("0");
+        }
+        for (int i = 0; i < arr.length; i++) {
+            String data = arr[i];
             try {
                 Integer.valueOf(data);
                 postfix.add(data);

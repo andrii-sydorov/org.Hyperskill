@@ -215,7 +215,7 @@ public class MultipleOperations {
                 // operations");
                 continue;
             }
-            // two operaunds shouldn't have a space beetwen operaunds
+            // two operands shouldn't have a space between operands
             p = Pattern.compile("\\w+\\s+\\w+");
             m = p.matcher(data);
             if (m.find()) {
@@ -333,32 +333,6 @@ public class MultipleOperations {
             }
         }
         return result.toArray(new String[0]);
-    }
-
-    public static String[] makeResult(String[] digits, String[] operations) {
-        int firstIndex = 0;
-        int secondIndex = 0;
-        String[] result = new String[operations.length + digits.length];
-        for (int i = 0; i < result.length; i++) {
-            if (digits.length > operations.length) {
-                if (i % 2 == 0) {
-                    result[i] = digits[firstIndex];
-                    firstIndex++;
-                } else {
-                    result[i] = operations[secondIndex];
-                    secondIndex++;
-                }
-            } else {
-                if (i % 2 == 0) {
-                    result[i] = operations[secondIndex];
-                    secondIndex++;
-                } else {
-                    result[i] = digits[firstIndex];
-                    firstIndex++;
-                }
-            }
-        }
-        return result;
     }
 
     public static String multipleSigns(String[] arr) {

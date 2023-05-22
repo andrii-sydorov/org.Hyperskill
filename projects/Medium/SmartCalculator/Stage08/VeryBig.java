@@ -1,5 +1,6 @@
-package projects.Medium.SmartCalculator.Stage07;
+package projects.Medium.SmartCalculator.Stage08;
 
+import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -11,150 +12,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Stage 7/8: I’ve got the power
- * 
- * $1. Description
- * 
- * In the final stage, it remains to add operations: multiplication *, integer
- * division / and parentheses (...). They have a higher priority than addition +
- * and subtraction -.
- * 
- * Here is an example of an expression that contains all possible operations:
- * 
- * 3 + 8 * ((4 + 3) * 2 + 1) - 6 / (2 + 1)
- * 
- * The result is 121.
- * 
- * A general expression can contain many parentheses and operations with
- * different priorities. It is difficult to calculate such expressions if you do
- * not use special methods. Fortunately, there is a fairly effective and
- * universal solution, using a stack, to calculate the most general expressions.
- * 
- * From infix to postfix
- * 
- * Earlier we processed expressions written in infix notation. This notation is
- * not very convenient if an expression has operations with different
- * priorities, especially when brackets are used. But we can use postfix
- * notation, also known as Reverse Polish notation (RPN). In this notation,
- * operators follow their operands. See several examples below.
- * 
- * Infix notation 1:
- * 3 + 2 * 4
- * 
- * Postfix notation 1:
- * 3 2 4 * +
- * 
- * Infix notation 2:
- * 2 * (3 + 4) + 1
- * 
- * Postfix notation 2:
- * 2 3 4 + * 1 +
- * 
- * To better understand the postfix notation, you can play with a converter.
- * 
- * As you can see, in postfix notation operations are arranged according to
- * their priority and parentheses are not used at all. So, it is easier to
- * calculate expressions written in postfix notation.
- * 
- * You can use a stack (LIFO) to convert an expression from infix to postfix
- * notation. The stack is used to store operators for reordering. Here are some
- * rules that describe how to create an algorithm that converts an expression
- * from infix to postfix notation.
- * 
- * 1. Add operands (numbers and variables) to the result (postfix notation) as they
- *    arrive.
- * 2. If the stack is empty or contains a left parenthesis on top, push the
- *    incoming operator on the stack.
- * 3. If the incoming operator has higher precedence than the top of the stack,
- *    push it on the stack.
- * 4. If the precedence of the incoming operator is lower than or equal to that of
- *    the top of the stack, pop the stack and add operators to the result until you
- *    see an operator that has smaller precedence or a left parenthesis on the top
- *    of the stack; then add the incoming operator to the stack.
- * 5. If the incoming element is a left parenthesis, push it on the stack.
- * 6. If the incoming element is a right parenthesis, pop the stack and add
- *    operators to the result until you see a left parenthesis. Discard the pair of
- *    parentheses.
- * 7. At the end of the expression, pop the stack and add all operators to the
- *    result.
- *    
- * No parentheses should remain on the stack. Otherwise, the expression has
- * unbalanced brackets. It is a syntax error.
- * 
- * Calculating the result
- * 
- * When we have an expression in postfix notation, we can calculate it using
- * another stack. To do that, scan the postfix expression from left to right:
- * 
- * - If the incoming element is a number, push it into the stack (the whole
- *   number, not a single digit!).
- * - If the incoming element is the name of a variable, push its value into the
- *   stack.
- * - If the incoming element is an operator, then pop twice to get two numbers and
- *   perform the operation; push the result on the stack.
- * - When the expression ends, the number on the top of the stack is a final
- *   result.
- *   
- * Here you can find an example and additional explanations on postfix
- * expressions.
- * 
- * $2. Objectives
- * 
- * - Your program should support multiplication *, integer division / and
- *   parentheses (...). To do this, use infix to postfix conversion algorithm
- *   above and then calculate the result using stack.
- * - Do not forget about variables; they, and the unary minus operator, should
- *   still work.
- * - Modify the result of the /help command to explain all possible operators. You
- *   can write the output for the command in free form.
- * - The program should not stop until the user enters the /exit command.
- * - Note that a sequence of + (like +++ or +++++) is an admissible operator that
- *   should be interpreted as a single plus. A sequence of - (like -- or ---) is
- *   also an admissible operator and its meaning depends on the length. If a user
- *   enters a sequence of * or /, the program must print a message that the
- *   expression is invalid.
- * - As a bonus, you may add the power operator ^ that has a higher priority than
- *   * and /.
- *   
- * > 2^2
- * 4
- * > 2*2^3
- * 16
- * 
- * $3. Examples
- * 
- * The greater-than symbol followed by a space (>) represents the user input.
- * 
- * > 8 * 3 + 12 * (4 - 2)
- * 48
- * > 2 - 2 + 3
- * 3
- * > 4 * (2 + 3
- * Invalid expression
- * > -10
- * -10
- * > a=4
- * > b=5
- * > c=6
- * > a*2+b*3+c*(2+3)
- * 53
- * > 1 +++ 2 * 3 -- 4
- * 11
- * > 3 *** 5
- * Invalid expression
- * > 4+3)
- * Invalid expression
- * > /command
- * Unknown command
- * > /exit
- * Bye!
- * 
- * @author SMD_ASY
- *
- */
-
-public class MultipleOperations {
+public class VeryBig {
 
     public static Map<String, Integer> map = new HashMap<>();
     public static Map<Character, Character> brackets = new HashMap<>();
@@ -188,7 +46,7 @@ public class MultipleOperations {
                 switch (data) {
                     case "/help":
                         System.out.println(
-                                "The program calculates the sum, difference, multiplication and divide of numbers");
+                                "The program calculates the sum, difference, multiplication and divide of very big numbers");
                         break;
                     case "/exit":
                         isRunning = false;
@@ -260,9 +118,9 @@ public class MultipleOperations {
                 // working with right part ar[1]
                 String value = readyForCalculate(ar[1]);
                 try {
-                    Integer.valueOf(value);
+                    new BigInteger(value);
                     variable.put(key, value);
-                } catch (NumberFormatException nfe) {
+                } catch (NullPointerException | NumberFormatException nfe) {
                     System.out.println("Unknown variable");
                 }
                 continue;
@@ -302,7 +160,9 @@ public class MultipleOperations {
                 if (sbDigitsLiterals.length() > 0) {
                     String ss = sbDigitsLiterals.toString();
                     try {
-                        Integer.valueOf(ss);
+                        // try to create instance of BigInteger, when success add it to List, when not
+                        // it's operation or value from map, checked later
+                        new BigInteger(ss);
                         result.add(ss);
                     } catch (NumberFormatException nfe) {
                         if (variable.get(ss) == null) {
@@ -319,7 +179,7 @@ public class MultipleOperations {
         if (sbDigitsLiterals.length() > 0) {
             String ss = sbDigitsLiterals.toString();
             try {
-                Integer.valueOf(ss);
+                new BigInteger(ss);
                 result.add(ss);
             } catch (NumberFormatException nfe) {
                 if (variable.get(ss) == null) {
@@ -398,9 +258,13 @@ public class MultipleOperations {
         for (int i = 0; i < arr.length; i++) {
             String data = arr[i];
             try {
-                Integer.valueOf(data);
+                new BigInteger(data);
                 postfix.add(data);
             } catch (NumberFormatException nfe) {
+
+//                if (m.matches() && (postfix.isEmpty() || operations.peek().equals("("))) {
+//                    postfix.add("0");
+//                }
                 while (true) {
                     if (operations.isEmpty() || operations.peek().equals("(") || data.equals("(")) {
                         operations.push(data);
@@ -429,35 +293,34 @@ public class MultipleOperations {
         return postfix;
     }
 
-    public static int calculate(Deque<String> postfix) {
-        Deque<Integer> digits = new ArrayDeque<>();
+    public static BigInteger calculate(Deque<String> postfix) {
+        Deque<BigInteger> digits = new ArrayDeque<>();
         while (!postfix.isEmpty()) {
             String s = postfix.pollFirst();
             try {
-                int i = Integer.valueOf(s);
-                digits.add(i);
+                BigInteger bi = new BigInteger(s);
+                digits.add(bi);
             } catch (NumberFormatException nfe) {
-                int second = digits.pollLast();
-                int first = digits.pollLast();
+                BigInteger second = digits.pollLast();
+                BigInteger first = digits.pollLast();
                 switch (s) {
                     case "+":
-                        digits.add(first + second);
+                        digits.add(first.add(second));
                         break;
                     case "-":
-                        digits.add(first - second);
+                        digits.add(first.subtract(second));
                         break;
                     case "*":
-                        digits.add(first * second);
+                        digits.add(first.multiply(second));
                         break;
                     case "/":
-                        digits.add(first / second);
+                        digits.add(first.divide(second));
                         break;
                     case "^":
-                        digits.push((int) Math.pow(first, second));
+                        digits.push(first.pow(second.intValue()));
                 }
             }
         }
         return digits.pop();
     }
-
 }

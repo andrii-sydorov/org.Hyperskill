@@ -12,6 +12,39 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Stage 8/8: Very big
+ * 
+ * $1. Description
+ * 
+ * In this stage, your program must support arithmetic operations (+, -, *, /)
+ * with very large numbers as well as parentheses to change the priority within
+ * an expression.
+ * 
+ * There are two ways to solve it. As an easy way, you may use the standard
+ * class for working with large numbers, just correctly apply it to your
+ * solution. If you want to practice algorithms, you may develop your own class
+ * for large numbers and implement algorithms for the listed arithmetic
+ * operations.
+ * 
+ * $2. Example
+ * 
+ * The greater-than symbol followed by a space (>) represents the user input.
+ * 
+ * > 112234567890 + 112234567890 * (10000000999 - 999)
+ * 1122345679012234567890
+ * > a = 800000000000000000000000
+ * > b = 100000000000000000000000
+ * > a + b
+ * 900000000000000000000000
+ * > /exit
+ * Bye!
+ * The program should not stop until the user enters the /exit command.
+ * 
+ * @author SMD_ASY
+ *
+ */
+
 public class VeryBig {
 
     public static Map<String, Integer> map = new HashMap<>();
@@ -135,8 +168,6 @@ public class VeryBig {
     }
 
     public static String readyForCalculate(String ar) {
-//        String[] digitsLiterals = ar.split("[^A-Za-z0-9]+");
-//        String[] operations = ar.split("[a-zA-Z0-9]*");
         String[] test = makeArrays(ar);
         if (test == null) {
             return null;
@@ -146,7 +177,6 @@ public class VeryBig {
         return value;
     }
 
-    // TODO find more optimal solutions with no such code replication
     public static String[] makeArrays(String ar) {
         List<String> result = new ArrayList<>();
         Pattern p = Pattern.compile("[a-zA-Z0-9]+");
@@ -246,7 +276,8 @@ public class VeryBig {
         return br.isEmpty();
     }
 
-    // -(-(4+2)/3) to implement
+    // TODO implement difficult equation like -(-(4+2)/3), but now I haven'y any
+    // wish to do this
     public static Deque<String> makePostfix(String[] arr) {
         Pattern p = Pattern.compile("[+-]");
         Matcher m = p.matcher(arr[0]);
@@ -261,10 +292,6 @@ public class VeryBig {
                 new BigInteger(data);
                 postfix.add(data);
             } catch (NumberFormatException nfe) {
-
-//                if (m.matches() && (postfix.isEmpty() || operations.peek().equals("("))) {
-//                    postfix.add("0");
-//                }
                 while (true) {
                     if (operations.isEmpty() || operations.peek().equals("(") || data.equals("(")) {
                         operations.push(data);

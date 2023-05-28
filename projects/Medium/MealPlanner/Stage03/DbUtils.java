@@ -2,8 +2,11 @@ package projects.Medium.MealPlanner.Stage03;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbUtils {
 
@@ -25,8 +28,8 @@ public class DbUtils {
 
     public static void deleteTable() {
         try (Statement st = con.createStatement()) {
-            String deleteMealsTable = "DELETE TABEL IF EXISTS meals";
-            String deleteIngredientsTable = "DELETE TABEL IF EXISTS ingredients";
+            String deleteMealsTable = "DROP TABLE IF EXISTS meals;";
+            String deleteIngredientsTable = "DROP TABLE IF EXISTS ingredients;";
             st.executeUpdate(deleteMealsTable);
             st.executeUpdate(deleteIngredientsTable);
         } catch (SQLException sql) {
@@ -36,8 +39,8 @@ public class DbUtils {
 
     public static void createTables() {
         try (Statement st = con.createStatement()) {
-            String createMealsTable = "CREATE TABLE IF NOT EXISTS meals(category VARCHAR(20), meal VRACHAR(50), meal_id Integer;";
-            String createIngredientsTABLE = "CREATE TABLE IF NOT EXISTS ingredients(ingredient VARCHAR(70) NOT NULL, ingredient_id SERIAL, meal_id INTEGER";
+            String createMealsTable = "CREATE TABLE IF NOT EXISTS meals(category VARCHAR(20), meal VARCHAR(50), meal_id Integer);";
+            String createIngredientsTABLE = "CREATE TABLE IF NOT EXISTS ingredients(ingredient VARCHAR(70) NOT NULL, ingredient_id SERIAL, meal_id INTEGER);";
             st.executeUpdate(createMealsTable);
             st.executeUpdate(createIngredientsTABLE);
         } catch (SQLException sql) {
@@ -50,15 +53,54 @@ public class DbUtils {
         String name = f.getName();
         String[] ingredients = f.getIngredients();
         try (Statement st = con.createStatement()) {
-            String addMeals = String.format("INSERT INTO meals VALUES(%s, %s, %d);", category, name, meals_id);
+            String addMeals = String.format("INSERT INTO meals VALUES('%s', '%s', %d);", category, name, meals_id);
             st.executeUpdate(addMeals);
             for (String s : ingredients) {
-                String addIngredients = String.format("INSERT INTO ingredients(ingredient, meal_id) VALUES(%s, %d)", s,
+                String addIngredients = String.format("INSERT INTO ingredients(ingredient, meal_id) VALUES('%s', %d)", s,
                         meals_id);
                 st.executeUpdate(addIngredients);
             }
         } catch (SQLException sqle) {
             System.out.println("The data are not saved in database!");
+        }
+        meals_id++;
+    }
+
+    public static List<Food> getMeal() {
+        List<Food> meals = new ArrayList<>();
+        try (Statement st = con.createStatement()) {
+            String getDataFromMealsTable = "SELECT * FROM meals;";
+            ResultSet rs = st.executeQuery(getDataFromMealsTable);
+            while (rs.next()) {
+                String category = rs.getString("category");
+                String name = rs.getString("meal");
+                int meal_id = rs.getInt("meal_id");
+                String getDataFromIngredients = String.format("SELECT ingredient FROM ingredients WHERE meal_id=%d",
+                        meal_id);
+                List<String> ingredients = new ArrayList<>();
+                ResultSet rsIngredients = st.executeQuery(getDataFromIngredients);
+                while (rsIngredients.next()) {
+                    String ingredient = rsIngredients.getString("ingredient");
+                    ingredients.add(ingredient);
+                }
+                String[] ingred = ingredients.toArray(new String[0]);
+                Food f = new Food();
+                f.setCategory(category);
+                f.setName(name);
+                f.setIngredients(ingred);
+                meals.add(f);
+            }
+        } catch (SQLException sqle) {
+            System.out.println("Cann't read data from database");
+        }
+        return meals;
+    }
+
+    public static void closeConnection() {
+        try {
+            con.close();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
     }
 }

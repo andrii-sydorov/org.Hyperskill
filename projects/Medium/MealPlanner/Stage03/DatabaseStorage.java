@@ -1,20 +1,26 @@
 package projects.Medium.MealPlanner.Stage03;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class DatabaseStorage {
 
-    private static List<Food> meals = new ArrayList<>();
+    // private static List<Food> meals = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean isRunning = true;
+        String url = "jdbc:postgresql:meals_db";
+        String user = "postgres";
+        String pass = "1111";
+        if (!DbUtils.createConnection(url, user, pass)) {
+            System.out.println("No connection established!");
+        }
+        DbUtils.deleteTable();
+        DbUtils.createTables();
         while (isRunning) {
             System.out.println("What would you like to do (add, show, exit)?");
             String option = sc.nextLine();
@@ -33,6 +39,7 @@ public class DatabaseStorage {
             }
 
         }
+        DbUtils.closeConnection();
         System.out.println("Bye!");
         sc.close();
     }
@@ -80,10 +87,11 @@ public class DatabaseStorage {
                 isIngredientsAdded = true;
             }
         }
-        meals.add(f);
+        DbUtils.addMeal(f);
     }
 
     public static void showMeals() {
+        List<Food> meals = DbUtils.getMeal();
         if (meals.size() == 0) {
             System.out.println("No meals saved. Add a meal first.");
             return;

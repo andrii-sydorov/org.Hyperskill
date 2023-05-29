@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DbUtils {
 
@@ -56,7 +59,8 @@ public class DbUtils {
             String addMeals = String.format("INSERT INTO meals VALUES('%s', '%s', %d);", category, name, meals_id);
             st.executeUpdate(addMeals);
             for (String s : ingredients) {
-                String addIngredients = String.format("INSERT INTO ingredients(ingredient, meal_id) VALUES('%s', %d)", s,
+                String addIngredients = String.format("INSERT INTO ingredients(ingredient, meal_id) VALUES('%s', %d)",
+                        s,
                         meals_id);
                 st.executeUpdate(addIngredients);
             }
@@ -66,8 +70,8 @@ public class DbUtils {
         meals_id++;
     }
 
-    public static List<Food> getMeal() {
-        List<Food> meals = new ArrayList<>();
+    public static Collection<Food> getMeal() {
+        Map<Integer, Food> map = new HashMap<>();
         try (Statement st = con.createStatement()) {
             String getDataFromMealsTable = "SELECT * FROM meals;";
             ResultSet rs = st.executeQuery(getDataFromMealsTable);
@@ -75,6 +79,14 @@ public class DbUtils {
                 String category = rs.getString("category");
                 String name = rs.getString("meal");
                 int meal_id = rs.getInt("meal_id");
+                Food f = new Food();
+                f.setCategory(category);
+                f.setName(name);
+                map.put(meal_id, f);
+            }
+            for (Map.Entry<Integer, Food> entr : map.entrySet()) {
+                Food f = entr.getValue();
+                int meal_id = entr.getKey();
                 String getDataFromIngredients = String.format("SELECT ingredient FROM ingredients WHERE meal_id=%d",
                         meal_id);
                 List<String> ingredients = new ArrayList<>();
@@ -84,16 +96,12 @@ public class DbUtils {
                     ingredients.add(ingredient);
                 }
                 String[] ingred = ingredients.toArray(new String[0]);
-                Food f = new Food();
-                f.setCategory(category);
-                f.setName(name);
                 f.setIngredients(ingred);
-                meals.add(f);
             }
         } catch (SQLException sqle) {
             System.out.println("Cann't read data from database");
         }
-        return meals;
+        return map.values();
     }
 
     public static void closeConnection() {

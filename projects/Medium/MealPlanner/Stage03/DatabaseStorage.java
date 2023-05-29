@@ -1,5 +1,6 @@
 package projects.Medium.MealPlanner.Stage03;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -91,7 +92,7 @@ public class DatabaseStorage {
     }
 
     public static void showMeals() {
-        List<Food> meals = DbUtils.getMeal();
+        List<Food> meals = new ArrayList<>(DbUtils.getMeal());
         if (meals.size() == 0) {
             System.out.println("No meals saved. Add a meal first.");
             return;

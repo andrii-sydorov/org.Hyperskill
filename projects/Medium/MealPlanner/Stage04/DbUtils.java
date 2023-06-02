@@ -7,15 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DbUtils {
 
     private static Connection con = null;
-    private static int meals_id = 1;
-    private static int ingredient_id = 1;
 
     public static boolean createConnection(String url, String user, String pass) {
         try {
@@ -56,6 +52,8 @@ public class DbUtils {
         String category = f.getCategory();
         String name = f.getName();
         String[] ingredients = f.getIngredients();
+        int meals_id = getMealsId() + 1;
+        int ingredient_id = getIngredientId() + 1;
         try (Statement st = con.createStatement()) {
             String addMeals = String.format("INSERT INTO meals VALUES('%s', '%s', %d);", category, name, meals_id);
             st.executeUpdate(addMeals);
@@ -71,11 +69,38 @@ public class DbUtils {
         } catch (SQLException sqle) {
             System.out.println("The data are not saved in database!");
         }
-        meals_id++;
+    }
+
+    public static int getMealsId() {
+        String getMealsId = "SELECT MAX(meal_id) FROM meals;";
+        int meals_id = 0;
+        try (Statement st = con.createStatement()) {
+            ResultSet rs = st.executeQuery(getMealsId);
+            while (rs.next()) {
+                meals_id = rs.getInt(1);
+            }
+        } catch (SQLException sqle) {
+            System.out.println("Getting the max value of meals_id");
+        }
+        return meals_id;
+    }
+    
+    public static int getIngredientId() {
+        String getIngredientsId = "SELECT MAX(ingredient_id) FROM ingredients;";
+        int ingredient_id = 0;
+        try (Statement st = con.createStatement()) {
+            ResultSet rs = st.executeQuery(getIngredientsId);
+            while (rs.next()) {
+                ingredient_id = rs.getInt(1);
+            }
+        } catch (SQLException sqle) {
+            System.out.println("Getting the max value of ingredient_id");
+        }
+        return ingredient_id;
     }
 
     public static Collection<Food> getMeal(String category) {
-        Map<Integer, Food> map = new HashMap<>();
+        List<Food> ls = new ArrayList<>();
         try (Statement st = con.createStatement()) {
             String getDataFromMealsTable = String.format("SELECT * FROM meals WHERE category = '%s';", category);
             ResultSet rs = st.executeQuery(getDataFromMealsTable);
@@ -85,26 +110,26 @@ public class DbUtils {
                 Food f = new Food();
                 f.setCategory(category);
                 f.setName(name);
-                map.put(meal_id, f);
-            }
-            for (Map.Entry<Integer, Food> entr : map.entrySet()) {
-                Food f = entr.getValue();
-                int meal_id = entr.getKey();
-                String getDataFromIngredients = String.format("SELECT ingredient FROM ingredients WHERE meal_id=%d",
-                        meal_id);
-                List<String> ingredients = new ArrayList<>();
-                ResultSet rsIngredients = st.executeQuery(getDataFromIngredients);
-                while (rsIngredients.next()) {
-                    String ingredient = rsIngredients.getString("ingredient");
-                    ingredients.add(ingredient);
+                try (Statement stInner = con.createStatement()) {
+                    String getDataFromIngredients = String.format("SELECT ingredient FROM ingredients WHERE meal_id=%d",
+                            meal_id);
+                    ResultSet rsInner = stInner.executeQuery(getDataFromIngredients);
+                    List<String> ingredients = new ArrayList<>();
+                    while (rsInner.next()) {
+                        String ingredient = rsInner.getString("ingredient");
+                        ingredients.add(ingredient);
+                    }
+                    String[] ingred = ingredients.toArray(new String[0]);
+                    f.setIngredients(ingred);
+                    ls.add(f);
+                } catch (SQLException sqle) {
+                    System.out.println("Some problems!");
                 }
-                String[] ingred = ingredients.toArray(new String[0]);
-                f.setIngredients(ingred);
             }
         } catch (SQLException sqle) {
             System.out.println("Cann't read data from database");
         }
-        return map.values();
+        return ls;
     }
 
     public static void closeConnection() {

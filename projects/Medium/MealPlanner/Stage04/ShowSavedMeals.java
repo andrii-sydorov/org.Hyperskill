@@ -7,6 +7,121 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Stage 4/6: Show saved meals
+ * 
+ * $1. Description
+ * 
+ * Let's improve the navigation in the program and make it more user-friendly!
+ * In this stage, we will enhance the show command. The program will ask users
+ * to specify the meal category with the following message: Which category do
+ * you want to print (breakfast, lunch, dinner)? After this, the program will
+ * search through the database and print only the chosen category. If the
+ * requested category is empty, the program should show an appropriate message.
+ * 
+ * $2. Objectives
+ * 
+ * When users input show, your program should:
+ * 
+ * - Ask users for the meal category;
+ * - Search through the database for meals from the chosen category;
+ * - Print Category: <category>. For each meal, print Meal's name: <meal name>,
+ *   followed by the specific meal ingredients list, each on a new line. The meals
+ *   and ingredients should be printed in the same order they've been added;
+ * - If the input category doesn't exist, print Wrong meal category! Choose from:
+ *   breakfast, lunch, dinner.;
+ * - If there're no meals in the category, print No meals found.
+ * 
+ * $3. Examples
+ * 
+ * The greater-than symbol followed by a space (> ) represents the user input.
+ * Note that it's not part of the input.
+ * 
+ * Example 1: standard execution
+ * 
+ * What would you like to do (add, show, exit)?
+ * > add
+ * Which meal do you want to add (breakfast, lunch, dinner)?
+ * > lunch
+ * Input the meal's name:
+ * > salad
+ * Input the ingredients:
+ * > lettuce, tomato, onion, cheese, olives
+ * The meal has been added!
+ * What would you like to do (add, show, exit)?
+ * > add
+ * Which meal do you want to add (breakfast, lunch, dinner)?
+ * > lunch
+ * Input the meal's name:
+ * > omelette
+ * Input the ingredients:
+ * > eggs, milk, cheese
+ * The meal has been added!
+ * What would you like to do (add, show, exit)?
+ * > add
+ * Which meal do you want to add (breakfast, lunch, dinner)?
+ * > breakfast
+ * Input the meal's name:
+ * > oatmeal
+ * Input the ingredients:
+ * > oats, milk, banana, peanut butter
+ * The meal has been added!
+ * What would you like to do (add, show, exit)?
+ * > show
+ * Which category do you want to print (breakfast, lunch, dinner)?
+ * > breakfast
+ * Category: breakfast
+ * Name: oatmeal
+ * Ingredients:
+ * oats
+ * milk
+ * banana
+ * peanut butter
+ * What would you like to do (add, show, exit)?
+ * > show
+ * Which category do you want to print (breakfast, lunch, dinner)?
+ * > lunch
+ * Category: lunch
+ * 
+ * Name: salad
+ * Ingredients:
+ * lettuce
+ * tomato
+ * onion
+ * cheese
+ * olives
+ * 
+ * Name: omelette
+ * Ingredients:
+ * eggs
+ * milk
+ * cheese
+ * 
+ * What would you like to do (add, show, exit)?
+ * > exit
+ * Bye!
+ * Example 2: warnings during execution
+ * 
+ * What would you like to do (add, show, exit)?
+ * > show
+ * Which category do you want to print (breakfast, lunch, dinner)?
+ * > dinner
+ * No meals found.
+ * What would you like to do (add, show, exit)?
+ * > show
+ * Which category do you want to print (breakfast, lunch, dinner)?
+ * > brunch
+ * Wrong meal category! Choose from: breakfast, lunch, dinner.
+ * > dinner
+ * No meals found.
+ * What would you like to do (add, show, exit)?
+ * > exit
+ * Bye!
+ * 
+ * @author SMD_ASY
+ *
+ */
+
 public class ShowSavedMeals {
 
     public static void main(String[] args) {
@@ -91,10 +206,11 @@ public class ShowSavedMeals {
 
     public static void showMeals(Scanner sc) {
         System.out.println("Which category do you want to print (breakfast, lunch, dinner)?");
-        String category = sc.nextLine();
+        String category = null;
         List<Food> meals = null;
         boolean showCategory = false;
-        while (!showCategory)
+        while (!showCategory) {
+            category = sc.nextLine();
             switch (category) {
                 case "breakfast":
                 case "lunch":
@@ -105,14 +221,15 @@ public class ShowSavedMeals {
                     System.out.println("Wrong meal category! Choose from: breakfast, lunch, dinner.");
                     break;
             }
+        }
         meals = new ArrayList<>(DbUtils.getMeal(category));
         if (meals.size() == 0) {
-            System.out.println("No meals saved. Add a meal first.");
+            System.out.println("No meals found.");
             return;
         }
         System.out.println("Category: " + category);
         System.out.println();
-        for (Food f : meals) {       
+        for (Food f : meals) {
             System.out.println("Name: " + f.getName());
             System.out.println("Ingredients:");
             for (String s : f.getIngredients()) {

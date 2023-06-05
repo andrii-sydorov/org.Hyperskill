@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DbUtils {
 
@@ -41,11 +43,8 @@ public class DbUtils {
         try (Statement st = con.createStatement()) {
             String createMealsTable = "CREATE TABLE IF NOT EXISTS meals(category VARCHAR(20), meal VARCHAR(50), meal_id Integer);";
             String createIngredientsTABLE = "CREATE TABLE IF NOT EXISTS ingredients(ingredient VARCHAR(70) NOT NULL, ingredient_id INTEGER, meal_id INTEGER);";
-            // category = breakfast etc., option = meal, plan_id = meal_id
-            String createPlanTABLE = "CREATE TABLE IF NOT EXISTS plan(category VARCHAR(70) NOT NULL, option VARCHAR(70), plan_id INTEGER);";
             st.executeUpdate(createMealsTable);
             st.executeUpdate(createIngredientsTABLE);
-            st.executeUpdate(createPlanTABLE);
         } catch (SQLException sql) {
             System.out.println("No datatable was added!");
         }
@@ -114,7 +113,8 @@ public class DbUtils {
                 f.setCategory(category);
                 f.setName(name);
                 try (Statement stInner = con.createStatement()) {
-                    String getDataFromIngredients = String.format("SELECT ingredient FROM ingredients WHERE meal_id=%d",
+                    String getDataFromIngredients = String.format(
+                            "SELECT ingredient FROM ingredients WHERE meal_id=%d;",
                             meal_id);
                     ResultSet rsInner = stInner.executeQuery(getDataFromIngredients);
                     List<String> ingredients = new ArrayList<>();
@@ -135,16 +135,59 @@ public class DbUtils {
         return ls;
     }
 
-    public static List<String> getCategory(String category) {
-        List<String> ls = new ArrayList<>();
-        String categoryQuery = String.format("SELECT meal FROM meals WHERE category = %s", category);
+    public static Map<Integer, String> getCategory(String category) {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        String categoryQuery = String.format("SELECT meal_id, meal FROM meals WHERE category = '%s' ORDER BY meal;",
+                category);
         try (Statement st = con.createStatement()) {
             ResultSet rs = st.executeQuery(categoryQuery);
             while (rs.next()) {
-                ls.add(rs.getString("meals"));
+                map.put(rs.getInt("meal_id"), rs.getString("meal"));
             }
         } catch (SQLException sqle) {
             System.out.println("Error: get category from meals table");
+        }
+        return map;
+    }
+
+    public static void addFoodToPlan(String category, String option, int plan_id) {
+        try (Statement st = con.createStatement()) {
+            String saveToPlan = String.format("INSERT INTO plan VALUES('%s', '%s', %d);", category, option, plan_id);
+            st.executeUpdate(saveToPlan);
+        } catch (SQLException sqle) {
+            System.out.println("Error by saving data to plan table!");
+        }
+    }
+
+    public static void deletePlanTable() {
+        try (Statement st = con.createStatement()) {
+            String deletePlanTable = "DROP TABLE IF EXISTS plan;";
+            st.executeUpdate(deletePlanTable);
+        } catch (SQLException sqle) {
+            System.out.println("Error by deleting plan table");
+        }
+    }
+
+    public static void createPlanTable() {
+        try (Statement st = con.createStatement()) {
+            // category = breakfast etc., option = meal, plan_id = meal_id
+            String createPlanTABLE = "CREATE TABLE IF NOT EXISTS plan(category VARCHAR(70) NOT NULL, option VARCHAR(70), plan_id INTEGER);";
+            st.executeUpdate(createPlanTABLE);
+        } catch (SQLException sql) {
+            System.out.println("Error: create datatable plan!");
+        }
+    }
+
+    public static List<String> getPlan(String day) {
+        List<String> ls = new ArrayList<>();
+        try (Statement st = con.createStatement()) {
+            String query = String.format("SELECT category FROM plan WHERE option = '%s';", day);
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                ls.add(rs.getString("category"));
+            }
+        } catch (SQLException sqle) {
+            System.out.println("Error by getting data from plan table!");
         }
         return ls;
     }

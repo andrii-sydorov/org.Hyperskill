@@ -3,6 +3,7 @@ package projects.Medium.MealPlanner.Stage05;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,8 +35,11 @@ public class WeeklyPlan {
                     break;
                 case "exit":
                     isRunning = false;
+                    break;
                 case "plan":
                     buildPlan(sc);
+                    showPlan();
+                    break;
                 default:
                     break;
             }
@@ -150,24 +154,51 @@ public class WeeklyPlan {
     }
 
     public static void buildPlan(Scanner sc) {
+        DbUtils.deletePlanTable();
+        DbUtils.createPlanTable();
         for (Days day : Days.values()) { // days cycle
             System.out.println(day.getDayNames()); // Monday etc
             for (Category c : Category.values()) { // category cycle lunch, breakfast etc
                 String category = c.getCategory();
-                List<String> foods = DbUtils.getCategory(category);
-                foods.forEach(x -> System.out.println(x));
+                Map<Integer, String> foods = DbUtils.getCategory(category);
+                foods.values().forEach(x -> System.out.println(x));
                 System.out.printf("Choose the breakfast for %s from the list above:\n", category);
                 String meal = null;
-                while (true) {
+                int plan_id = 0;
+                boolean isDone = false;
+                while (!isDone) {
                     meal = sc.nextLine();
-                    if (foods.contains(meal)) {
-                        break;
+                    for (Map.Entry<Integer, String> entr : foods.entrySet()) {
+                        if (entr.getValue().equals(meal)) {
+                            plan_id = entr.getKey();
+                            isDone = true;
+                            break;
+                        }
                     }
-                    System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
+                    if (!isDone) {
+                        System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
+                    }
                 }
-                // TODO save to the database result of the query
+                // not the best solution, but to have many hashmap to show the plan isn't good!
+                // that's why save in database category + meal, day, plan_id
+                // category should start with uppercase
+                String cat = Character.toString(Character.toUpperCase(category.charAt(0))) + category.substring(1);
+                DbUtils.addFoodToPlan(cat + ": " + meal, day.getDayNames(), plan_id);
             }
+            System.out.printf("Yeah! We planned the meals for %s.\n", day.getDayNames());
+            System.out.println();
         }
+    }
+
+    public static void showPlan() {
+        for (Days d : Days.values()) {
+            String day = d.getDayNames();
+            List<String> ls = DbUtils.getPlan(day);
+            System.out.println(day);
+            ls.forEach(x -> System.out.println(x));
+            System.out.println();
+        }
+        //System.out.println();
     }
 
 }
@@ -223,7 +254,7 @@ class Food {
 
 enum Days {
     MONDAY("Monday"),
-    TUESDAY("Tuesaday"),
+    TUESDAY("Tuesday"),
     WEDNESDAY("Wednesday"),
     THURSDAY("Thursday"),
     FRIDAY("Friday"),
@@ -244,8 +275,8 @@ enum Days {
 enum Menu {
     ADD("add"),
     SHOW("show"),
-    EXIT("exit"),
-    PLAN("plan");
+    PLAN("plan"),
+    EXIT("exit");
 
     private String menu;
 

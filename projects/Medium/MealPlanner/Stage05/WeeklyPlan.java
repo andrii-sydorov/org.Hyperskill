@@ -9,6 +9,286 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * <h6>Stage 5/6: Weekly plan</h6>
+ * 
+ * <h5>$1. Description</h5>
+ * 
+ * <p>A solid person plans for the week ahead! Let's help our users plan their
+ * meals for the entire week. In this stage, we will add a new command — <b>plan</b>.
+ * We also need to change the main menu accordingly. From now on, it should read
+ * as <b>What would you like to do (add, show, plan, exit)?</b></p>
+ * 
+ * <p>When users input <b>plan</b>, the program should print the first day of the week,
+ * <b>Monday</b>, and print the list of all breakfasts stored in the database in
+ * alphabetical order. After this, the program should ask users to pick a meal
+ * with the following message: <b>Choose the breakfast for Monday from the list
+ * above:</b></p>
+ * 
+ * <p>After users input a meal option, the program should verify it. If it's not
+ * stored in the database, print <b>This meal doesn’t exist. Choose a meal from the
+ * list above.</b> If the input is correct, move on to the next category — <b>lunch</b> and
+ * then to <b>dinner</b>. Once the meals for three categories are picked, print <b>Yeah!
+ * We planned the meals for Monday.</b> Repeat these steps for other weekdays. In
+ * the end, print the whole plan for the week.</p>
+ * 
+ * <p>Save the plan to the database. For this purpose, create a new table named
+ * <b>plan</b> when the program starts. This table contains the meal option, meal
+ * category, and <b>meal_id</b>. The third column must match the <b>meal_id</b> columns of the
+ * other two tables. You are free to choose how to implement the fields in this
+ * table. If a new plan is created, delete the old plan.</p>
+ * 
+ * <h5>$2. Objectives</h5>
+ * <ol>
+ * <li>Create a table in the database named <b>plan</b>;</li>
+ * <li>Add the <b>plan</b> option to the menu;</li>
+ * <li>When users choose the <b>plan</b> option:</li>
+ * <ul>
+ * <li> Print <b>Monday</b>;</li>
+ * <li> Print the meal names of the breakfast category in alphabetical order;</li>
+ * <li> Prompt <b>Choose the breakfast for Monday from the list above:</b></li>
+ * <li> Once users input a meal, print the meal names of the lunch category in
+ *      alphabetical order;</li>
+ * <li> Prompt <b>Choose the lunch for Monday from the list above:</b></li>
+ * <li> Once users input a meal, print the meal names of the dinner category in
+ *      alphabetical order;</li>
+ * <li> Prompt <b>Choose the dinner for Monday from the list above:</b></li>
+ * <li> Once users input a meal, print <b>Yeah! We planned the meals for Monday.</b></li>
+ * <li> If a meal option isn't in the provided list, print <b>This meal doesn’t exist. Choose a meal from the list above.</b>;</li>
+ * <li> Print a blank line and repeat for the rest of the week;</li>
+ * <li> Once the plan for the week is drawn, print it. The plan print format is as follows:</li>
+ * </ul>
+ * </ol>
+ * 
+ * <p>
+ * Monday<br>
+ * Breakfast: [meal's name]<br>
+ * Lunch: [meal's name]<br>
+ * Dinner: [meal's name]<br>
+ * <br>
+ * Tuesday etc.<br></p>
+ * 
+ * <ul>
+ * <li> Save the plan data in the <b>plan</b> table. Overwrite the old plan every time a new
+ *   plan is created.</li></ul>
+ *   
+ * <h5>$3. Example</h5>
+ * 
+ * <p>The greater-than symbol followed by a space (> ) represents the user input.
+ * Note that it's not part of the input.</p>
+ * 
+ * <p>The example below assumes that the database stores a few meals.</p>
+ * 
+ * <p>Example 1: planning for the week</p>
+ * 
+ * What would you like to do (add, show, plan, exit)?<br>
+ * > plan<br>
+ * Monday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Monday from the list above:<br>
+ * > yogurt<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Monday from the list above:<br>
+ * > tomato salad<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Monday from the list above:<br>
+ * > spaghetti<br>
+ * This meal doesn’t exist. Choose a meal from the list above.<br>
+ * > ramen<br>
+ * Yeah! We planned the meals for Monday.<br>
+ * <br>
+ * Tuesday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Tuesday from the list above:<br>
+ * > oatmeal<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Tuesday from the list above:<br>
+ * > wraps<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Tuesday from the list above:<br>
+ * > ramen<br>
+ * Yeah! We planned the meals for Tuesday.<br>
+ * <br>
+ * Wednesday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Wednesday from the list above:<br>
+ * > sandwich<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Wednesday from the list above:<br>
+ * > avocado egg salad<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Wednesday from the list above:<br>
+ * > pesto chicken<br>
+ * Yeah! We planned the meals for Wednesday.<br>
+ * <br>
+ * Thursday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Thursday from the list above:<br>
+ * > oatmeal<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Thursday from the list above:<br>
+ * > chicken salad<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Thursday from the list above:<br>
+ * > tomato soup<br>
+ * Yeah! We planned the meals for Thursday.<br>
+ * <br>
+ * Friday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Friday from the list above:<br>
+ * > yogurt<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Friday from the list above:<br>
+ * > sushi<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Friday from the list above:<br>
+ * > pizza<br>
+ * Yeah! We planned the meals for Friday.<br>
+ * <br>
+ * Saturday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Saturday from the list above:<br>
+ * > scrambled eggs<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Saturday from the list above:<br>
+ * > wraps<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Saturday from the list above:<br>
+ * > pesto chicken<br>
+ * Yeah! We planned the meals for Saturday.<br>
+ * <br>
+ * Sunday<br>
+ * oatmeal<br>
+ * sandwich<br>
+ * scrambled eggs<br>
+ * yogurt<br>
+ * Choose the breakfast for Sunday from the list above:<br>
+ * > scrambled eggs<br>
+ * avocado egg salad<br>
+ * chicken salad<br>
+ * sushi<br>
+ * tomato salad<br>
+ * wraps<br>
+ * Choose the lunch for Sunday from the list above:<br>
+ * > tomato salad<br>
+ * beef with broccoli<br>
+ * pesto chicken<br>
+ * pizza<br>
+ * ramen<br>
+ * tomato soup<br>
+ * Choose the dinner for Sunday from the list above:<br>
+ * > beef with broccoli<br>
+ * Yeah! We planned the meals for Sunday.<br>
+ * <br>
+ * Monday<br>
+ * Breakfast: yogurt<br>
+ * Lunch: tomato salad<br>
+ * Dinner: ramen<br>
+ * <br>
+ * Tuesday<br>
+ * Breakfast: oatmeal<br>
+ * Lunch: wraps<br>
+ * Dinner: ramen<br>
+ * <br>
+ * Wednesday<br>
+ * Breakfast: sandwich<br>
+ * Lunch: avocado egg salad<br>
+ * Dinner: pesto chicken<br>
+ * <br>
+ * Thursday<br>
+ * Breakfast: oatmeal<br>
+ * Lunch: chicken salad<br>
+ * Dinner: tomato soup<br>
+ * <br>
+ * Friday<br>
+ * Breakfast: yogurt<br>
+ * Lunch: sushi<br>
+ * Dinner: pizza<br>
+ * <br>
+ * Saturday<br>
+ * Breakfast: scrambled eggs<br>
+ * Lunch: wraps<br>
+ * Dinner: pesto chicken<br>
+ * <br>
+ * Sunday<br>
+ * Breakfast: scrambled eggs<br>
+ * Lunch: tomato salad<br>
+ * Dinner: beef with broccoli<br>
+ * <br>
+ * What would you like to do (add, show, plan, exit)?<br>
+ * > exit<br>
+ * Bye!<br>
+ * 
+ * @author SMD_ASY
+ *
+ */
+
 public class WeeklyPlan {
 
     public static void main(String[] args) {
@@ -162,7 +442,7 @@ public class WeeklyPlan {
                 String category = c.getCategory();
                 Map<Integer, String> foods = DbUtils.getCategory(category);
                 foods.values().forEach(x -> System.out.println(x));
-                System.out.printf("Choose the breakfast for %s from the list above:\n", category);
+                System.out.printf("Choose the %s for %s from the list above:\n", category, day.getDayNames());
                 String meal = null;
                 int plan_id = 0;
                 boolean isDone = false;
@@ -198,7 +478,7 @@ public class WeeklyPlan {
             ls.forEach(x -> System.out.println(x));
             System.out.println();
         }
-        //System.out.println();
+        // System.out.println();
     }
 
 }

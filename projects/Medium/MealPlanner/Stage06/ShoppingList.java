@@ -12,6 +12,96 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * <h5>Stage 6/6: Shopping list</h5>
+ * 
+ * <h6>$1. Description</h6>
+ * 
+ * <p>
+ * Meal planning is only half of the job: we also need to be sure that we have
+ * all ingredients! In this stage, the program should generate a shopping list
+ * that contains the required ingredients for meals. If several meals require
+ * one ingredient, put it in the list only once in the following format:
+ * ingredient xN, where N is how many times we need this ingredient.
+ * </p>
+ * 
+ * <p>
+ * Finally, let's add the option of saving the list as a file. Add the save
+ * command to the menu. Save the shopping list to a file and print an
+ * appropriate message. Don't forget to ask users for the file name.
+ * </p>
+ * 
+ * <h6>$2. Objectives</h6>
+ * <ol>
+ * <li>Add the <b>save</b> option to the menu. This is how the first message
+ * should look in
+ * this stage: <b>What would you like to do (add, show, plan, save,
+ * exit)?</b></li>
+ * <li>When users choose plan:</li>
+ * <ul>
+ * <li>The <b>save</b> option is available only after users have made the plan
+ * for the
+ * week. If the plan isn't ready, print <b>Unable to save. Plan your meals
+ * first.</b>
+ * and go back to the menu;</li>
+ * <li>Ask users about a filename with the message: <b>Input a
+ * filename:</b></li>
+ * <li>When the list has been saved, print <b>Saved!</b></li>
+ * </ul>
+ * </ol>
+ * <p>
+ * The format of the shopping list is as follows:
+ * </p>
+ * 
+ * <br>
+ * eggs<br>
+ * tomato x3<br>
+ * beef<br>
+ * broccoli<br>
+ * salmon<br>
+ * chicken x2<br>
+ * 
+ * <p>
+ * The ingredients can be stored in any order.
+ * </p>
+ * 
+ * <h6>$3. Examples</h6>
+ * 
+ * <p>
+ * The greater-than symbol followed by a space (<b>></b> ) represents the user
+ * input.
+ * Note that it's not part of the input.
+ * </p>
+ * <br>
+ * <p>
+ * Example 1: the database has a few meals; the plan command has been executed
+ * </p>
+ * 
+ * What would you like to do (add, show, plan, save, exit)?<br>
+ * > save<br>
+ * Input a filename:<br>
+ * > shoppinglist.txt<br>
+ * Saved!<br>
+ * What would you like to do (add, show, plan, save, exit)?<br>
+ * > exit<br>
+ * Bye!<br>
+ * 
+ * <p>
+ * Example 2: the database has a few meals; the plan command hasn't been
+ * executed
+ * </p>
+ * 
+ * What would you like to do (add, show, plan, save, exit)?<br>
+ * > save<br>
+ * Unable to save. Plan your meals first.<br>
+ * What would you like to do (add, show, plan, save, exit)?<br>
+ * > exit<br>
+ * Bye!<br>
+ * 
+ * @author SMD_ASY
+ *
+ */
+
 public class ShoppingList {
 
     public static void main(String[] args) {
@@ -160,8 +250,7 @@ public class ShoppingList {
     }
 
     public static void buildPlan(Scanner sc) {
-        DbUtils.deletePlanTable();
-        DbUtils.createPlanTable();
+        DbUtils.truncatePlanTable();
         for (Days day : Days.values()) { // days cycle
             System.out.println(day.getDayNames()); // Monday etc
             for (Category c : Category.values()) { // category cycle lunch, breakfast etc

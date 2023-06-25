@@ -1,4 +1,4 @@
-package JawaSwing;
+package JawaSwing.Layout;
 
 import java.awt.BorderLayout;
 

@@ -30,7 +30,6 @@ public class ConnectFour extends JFrame {
         int column = 7;
 
         JPanel jPanelField = new JPanel();
-        jPanelField.setSize(380, 400);
         jPanelField.setLayout(new GridLayout(raw, column, 0, 0));
 
         int x = 0;
@@ -71,13 +70,12 @@ public class ConnectFour extends JFrame {
         add(jPanelField, BorderLayout.CENTER);
 
         JPanel jPanelReset = new JPanel();
-        jPanelReset.setSize(20, 400);
-        jPanelReset.setLayout(null);
-        jPanelReset.setLayout(new BorderLayout());
+        //jPanelReset.setLayout(null);
+        //jPanelReset.setLayout(new BorderLayout());
 
         JButton ButtonReset = new JButton("");
         ButtonReset.setText("Reset");
-        jPanelReset.add(ButtonReset, BorderLayout.CENTER);
+        jPanelReset.add(ButtonReset);
         ButtonReset.addActionListener(new ActionListener() {
 
             @Override
@@ -88,7 +86,7 @@ public class ConnectFour extends JFrame {
         });
 
         add(jPanelReset, BorderLayout.SOUTH);
-
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -145,6 +143,11 @@ public class ConnectFour extends JFrame {
                 markJButton(ls);
                 gameIsFinished = true;
             }
+            // check side diagonal
+            if (checkSideDiagonalCondition(mark, ls)) {
+                markJButton(ls);
+                gameIsFinished = true;
+            }
 
         }
 
@@ -168,6 +171,7 @@ public class ConnectFour extends JFrame {
                     return true;
                 }
             }
+            ls.clear();
             return false;
         }
 
@@ -191,6 +195,7 @@ public class ConnectFour extends JFrame {
                     return true;
                 }
             }
+            ls.clear();
             return false;
         }
 
@@ -212,10 +217,8 @@ public class ConnectFour extends JFrame {
                 }
                 // r = x - i >= 0 ? x - i : 0;
                 // c = y - i >= 0 ? y - i : 0;
-
                 // r = x - i < jbArray.length ? x - i : jbArray.length - 1;
                 // c = y - i < jbArray[0].length ? y - i : jbArray[0].length - 1;
-
                 set.add(jbArray[r][c]);
             }
 
@@ -229,7 +232,40 @@ public class ConnectFour extends JFrame {
                     return true;
                 }
             }
+            ls.clear();
+            return false;
+        }
 
+        private static boolean checkSideDiagonalCondition(String mark, List<JButton> ls) {
+
+            Set<JButton> set = new LinkedHashSet<>();
+
+            /**
+             * the main formula the raws and columns should be increased and decreased
+             * at the same time
+             */
+            int r = 0;
+            int c = 0;
+            for (int i = 3; i > -4; i--) {
+                r = x - i;
+                c = y + i;
+                if (r < 0 || c < 0 || r > jbArray.length - 1 || c > jbArray[r].length - 1) {
+                    continue;
+                }
+                set.add(jbArray[r][c]);
+            }
+
+            for (JButton jb : set) {
+                if (jb.getText().equals(mark)) {
+                    ls.add(jb);
+                } else {
+                    ls.clear();
+                }
+                if (ls.size() == 4) {
+                    return true;
+                }
+            }
+            ls.clear();
             return false;
         }
 
@@ -238,7 +274,6 @@ public class ConnectFour extends JFrame {
                 jb.setBackground(Color.GREEN);
             }
 
-            ls.clear();
         }
     }
 

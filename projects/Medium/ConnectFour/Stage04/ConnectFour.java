@@ -57,7 +57,6 @@ public class ConnectFour extends JFrame {
                         }
                         mark = mark.equals("X") ? "O" : "X";
                         jbAnother.setText(mark);
-                        jbAnother.setBackground(Color.MAGENTA);
                         Tools.checkWin();
                     }
                 });
@@ -70,8 +69,6 @@ public class ConnectFour extends JFrame {
         add(jPanelField, BorderLayout.CENTER);
 
         JPanel jPanelReset = new JPanel();
-        //jPanelReset.setLayout(null);
-        //jPanelReset.setLayout(new BorderLayout());
 
         JButton ButtonReset = new JButton("");
         ButtonReset.setText("Reset");

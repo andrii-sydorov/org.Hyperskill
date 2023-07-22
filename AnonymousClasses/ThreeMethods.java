@@ -1,4 +1,4 @@
-package AnonymousСlasses;
+package AnonymousClasses;
 
 /**
  * An anonymous class with three methods  

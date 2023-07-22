@@ -1,4 +1,4 @@
-package AnonymousСlasses;
+package AnonymousClasses;
 
 /**
  * Implement Runnable 

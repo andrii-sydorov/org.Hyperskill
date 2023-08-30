@@ -1,9 +1,9 @@
 package projects.Medium.MusicAdvisor.Stage04;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.Scanner;
 
-import projects.Medium.MusicAdvisor.Stage04.app.LocalClient;
 import projects.Medium.MusicAdvisor.Stage04.auth.Authorization;
 
 public class Application {
@@ -23,7 +23,7 @@ public class Application {
 
     public void start() throws IOException {
         Scanner sc = new Scanner(System.in);
-        boolean isRunning = false;
+        boolean isRunning = true;
         boolean isSigned = false;
         while (isRunning) {
             String userOption = sc.nextLine();
@@ -31,7 +31,7 @@ public class Application {
                 System.out.println("Please, provide access for application.");
                 continue;
             }
-            LocalClient lc = LocalClient.getLocalClient();
+            HttpClient lc = HttpClient.newHttpClient();
             String[] arr = userOption.trim().split("\\s+");
             switch (arr[0]) {
                 case "featured":
@@ -43,10 +43,11 @@ public class Application {
                 case "playlists":
                     break;
                 case "auth":
-                    Authorization a = Authorization.getAuthorization(lc);
+                    Authorization a = Authorization.getAuthorization(lc, access);
                     a.start();
-                    lc.setCode(a.getCode());
-                    lc.setAccess(access);
+                    a.postRequest();
+                    accesToken = a.getAccessToken();
+                    System.out.println(accesToken);
                     break;
                 case "exit":
                     System.out.println("---GOODBYE!---");

@@ -92,14 +92,14 @@ public class Authorization {
             parseAccessToken(spotifyResponse);
         } catch (InterruptedException | IOException ie) {
             ie.printStackTrace();
-
         }
     }
 
     public void parseAccessToken(String spotifyResponse) {
         // TODO parse data to get access token
-//        JsonObject jo = JsonParser.parseString(spotifyResponse).getAsJsonObject();
-//        accessToken = jo.get("access_token").getAsString();
+        JsonObject jo = JsonParser.parseString(spotifyResponse).getAsJsonObject();
+        accessToken = jo.get("access_token").getAsString();
+        System.out.println(accessToken);
         Map<String, String> map = new HashMap<>();
         String[] arr = spotifyResponse.replaceAll("\"","").replace("{", "").replace("}", "").split(",");
         for (String s : arr) {

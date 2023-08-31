@@ -5,6 +5,9 @@ import java.net.http.HttpClient;
 import java.util.Scanner;
 
 import projects.Medium.MusicAdvisor.Stage04.auth.Authorization;
+import projects.Medium.MusicAdvisor.Stage04.category.Category;
+import projects.Medium.MusicAdvisor.Stage04.feature.Feature;
+import projects.Medium.MusicAdvisor.Stage04.newSongs.NewReleases;
 
 public class Application {
 
@@ -35,19 +38,30 @@ public class Application {
             String[] arr = userOption.trim().split("\\s+");
             switch (arr[0]) {
                 case "featured":
+                    Feature f = Feature.getFeature(lc, resource, accesToken);
+                    f.start();
+                    f.printFeature();
                     break;
                 case "new":
+                    NewReleases ns = NewReleases.getNewReleases(lc, resource, accesToken);
+                    ns.start();
                     break;
                 case "categories":
+                    Category c = Category.getCategory(lc, resource, accesToken);
+                    c.start();
+                    c.printCategories();
                     break;
                 case "playlists":
                     break;
                 case "auth":
+                    if (isSigned) {
+                        continue;
+                    }
                     Authorization a = Authorization.getAuthorization(lc, access);
                     a.start();
                     a.postRequest();
                     accesToken = a.getAccessToken();
-                    System.out.println(accesToken);
+                    isSigned = true;
                     break;
                 case "exit":
                     System.out.println("---GOODBYE!---");

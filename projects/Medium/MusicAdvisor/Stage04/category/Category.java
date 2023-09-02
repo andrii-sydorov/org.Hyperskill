@@ -6,7 +6,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,10 +19,10 @@ public class Category {
     HttpClient cl;
     private String resource;
     private String accessToken;
-    private List<String> ls = new ArrayList<>();
+    private Map<String, String> map = new LinkedHashMap<>();
 
-    public List<String> getLs() {
-        return this.ls;
+    public Map<String, String> getMap() {
+        return this.map;
     }
 
     private Category(HttpClient cl, String resource, String accessToken) {
@@ -41,7 +43,7 @@ public class Category {
 
         try {
             HttpResponse<String> response = cl.send(request, HttpResponse.BodyHandlers.ofString());
-            //System.out.println(response.statusCode());
+            // System.out.println(response.statusCode());
             parseJSon(response.body());
         } catch (InterruptedException | IOException i) {
             i.printStackTrace();
@@ -59,11 +61,13 @@ public class Category {
             items.add(je.getAsJsonObject());
         }
         for (JsonObject jo : items) {
-            ls.add(jo.get("name").getAsString());
+            String key = jo.get("name").getAsString();
+            String value = jo.get("id").getAsString();
+            map.put(key, value);
         }
     }
-    
+
     public void printCategories() {
-        ls.forEach(x -> System.out.println(x));
+        map.forEach((k, v) -> System.out.println(k));
     }
 }

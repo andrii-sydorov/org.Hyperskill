@@ -58,6 +58,7 @@ public class Authorization {
             }
         }
         code = ls.getCode();
+        System.out.println("code received");
         ls.stopServer(1);
     }
 
@@ -85,10 +86,10 @@ public class Authorization {
         try {
             HttpResponse<String> response = lc.send(request, HttpResponse.BodyHandlers.ofString());
 //            System.out.println(response.statusCode());
-//            System.out.println(response.uri());
 //            System.out.println(response.body());
+            System.out.println("Making http request for access_token...");
             String spotifyResponse = response.body();
-            System.out.println(spotifyResponse);
+//            System.out.println(spotifyResponse);
             parseAccessToken(spotifyResponse);
         } catch (InterruptedException | IOException ie) {
             ie.printStackTrace();
@@ -99,13 +100,14 @@ public class Authorization {
         // TODO parse data to get access token
         JsonObject jo = JsonParser.parseString(spotifyResponse).getAsJsonObject();
         accessToken = jo.get("access_token").getAsString();
-        System.out.println(accessToken);
+        // System.out.println(accessToken);
         Map<String, String> map = new HashMap<>();
-        String[] arr = spotifyResponse.replaceAll("\"","").replace("{", "").replace("}", "").split(",");
+        String[] arr = spotifyResponse.replaceAll("\"", "").replace("{", "").replace("}", "").split(",");
         for (String s : arr) {
             String[] t = s.split(":");
             map.put(t[0], t[1]);
         }
         accessToken = map.get("access_token");
+        System.out.println("Success!");
     }
 }

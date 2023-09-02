@@ -2,18 +2,21 @@ package projects.Medium.MusicAdvisor.Stage04;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.Map;
 import java.util.Scanner;
 
 import projects.Medium.MusicAdvisor.Stage04.auth.Authorization;
 import projects.Medium.MusicAdvisor.Stage04.category.Category;
 import projects.Medium.MusicAdvisor.Stage04.feature.Feature;
 import projects.Medium.MusicAdvisor.Stage04.newSongs.NewReleases;
+import projects.Medium.MusicAdvisor.Stage04.playlist.Playlist;
 
 public class Application {
 
     private static String access;
     private static String resource;
     private static String accesToken;
+    private static Map<String, String> categories;
 
     private Application(String access, String resource) {
         this.access = access;
@@ -50,8 +53,11 @@ public class Application {
                     Category c = Category.getCategory(lc, resource, accesToken);
                     c.start();
                     c.printCategories();
+                    categories = c.getMap();
                     break;
                 case "playlists":
+                    Playlist pl = Playlist.getPlaylist(lc, resource, accesToken, categories, arr[1]);
+                    pl.start();
                     break;
                 case "auth":
                     if (isSigned) {

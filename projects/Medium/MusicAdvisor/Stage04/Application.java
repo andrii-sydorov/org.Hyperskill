@@ -33,7 +33,7 @@ public class Application {
         boolean isSigned = false;
         while (isRunning) {
             String userOption = sc.nextLine();
-            if (!userOption.equals("auth") & isSigned == false) {
+            if (!(userOption.equals("auth") || userOption.equals("exit")) & isSigned == false) {
                 System.out.println("Please, provide access for application.");
                 continue;
             }
@@ -56,7 +56,8 @@ public class Application {
                     categories = c.getMap();
                     break;
                 case "playlists":
-                    Playlist pl = Playlist.getPlaylist(lc, resource, accesToken, categories, arr[1]);
+                    String categoryName = getStringFromArray(arr);
+                    Playlist pl = Playlist.getPlaylist(lc, resource, accesToken, categories, categoryName);
                     pl.start();
                     break;
                 case "auth":
@@ -78,5 +79,16 @@ public class Application {
             }
         }
         sc.close();
+    }
+
+    public String getStringFromArray(String[] arr) {
+        if (arr.length == 1) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < arr.length; i++) {
+            sb.append(arr[i] + " ");
+        }
+        return sb.toString().trim();
     }
 }

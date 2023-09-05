@@ -101,13 +101,6 @@ public class Authorization {
         JsonObject jo = JsonParser.parseString(spotifyResponse).getAsJsonObject();
         accessToken = jo.get("access_token").getAsString();
         // System.out.println(accessToken);
-        Map<String, String> map = new HashMap<>();
-        String[] arr = spotifyResponse.replaceAll("\"", "").replace("{", "").replace("}", "").split(",");
-        for (String s : arr) {
-            String[] t = s.split(":");
-            map.put(t[0], t[1]);
-        }
-        accessToken = map.get("access_token");
         System.out.println("Success!");
     }
 }

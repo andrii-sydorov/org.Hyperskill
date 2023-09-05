@@ -55,20 +55,17 @@ public class Playlist {
         try {
             HttpResponse<String> response = cl.send(request, HttpResponse.BodyHandlers.ofString());
             // System.out.println(response.body());
-            print(response);
+            printPlaylist(response);
         } catch (InterruptedException | IOException ie) {
             ie.printStackTrace();
         }
 
     }
 
-    public void print(HttpResponse<String> response) {
+    public void printPlaylist(HttpResponse<String> response) {
         String data = response.body();
         JsonObject jsonObject = JsonParser.parseString(data).getAsJsonObject();
-        int code = response.statusCode();
-        Pattern p = Pattern.compile("[45]..");
-        Matcher m = p.matcher(String.valueOf(code));
-        if (m.matches()) {
+        if (jsonObject.toString().contains("error")) {
             JsonObject error = jsonObject.getAsJsonObject("error");
             String message = error.get("message").getAsString();
             System.out.println(message);

@@ -62,7 +62,9 @@ public class Feature {
         }
         // getting "description" and "spotify" from array of objects
         for (JsonObject t : items) {
-            String key = t.get("description").getAsString();
+            //String key = t.get("description").getAsString();
+            // to pass the test we need "name"
+            String key = t.get("name").getAsString();
             JsonObject extrenalURLs = t.getAsJsonObject("external_urls");
             String value = extrenalURLs.get("spotify").getAsString();
             map.put(key, value);

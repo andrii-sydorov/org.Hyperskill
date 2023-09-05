@@ -6,9 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -62,7 +60,7 @@ public class NewReleases {
         for (JsonObject obj : ls) {
             // getting the album name
             String albumName = obj.get("name").getAsString();
-            //getting the utl from external_urls
+            //getting the url from external_urls
             JsonObject externalURL = obj.get("external_urls").getAsJsonObject();
             String url = externalURL.get("spotify").getAsString();
             // getting the array of artists
